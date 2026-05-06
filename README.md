@@ -120,24 +120,6 @@ Release output is written to `.build\artifacts\`.
 
 Build logs are stored under `.codex-tools\logs\`. The latest run is referenced by `.codex-tools\logs\latest-run.txt`.
 
-## Brand Assets
-
-<p align="center">
-  <img src="pntr-icon.svg" alt="Pointer icon" width="96" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="pntr-icon-w.svg" alt="Pointer icon white" width="96" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="src/img/pntr-logo.png" alt="Pointer logo" width="120" />
-  &nbsp;&nbsp;&nbsp;
-  <img src="src/img/logo-pntr.png" alt="Pointer mark" width="120" />
-</p>
-
-<p align="center">
-  <img src="src/img/bg-pntr.png" alt="Pointer dark visual" width="32%" />
-  <img src="src/img/w-pntr.png" alt="Pointer white visual" width="32%" />
-  <img src="src/img/b-pntr.png" alt="Pointer black visual" width="32%" />
-</p>
-
 ## Documentation
 
 - [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) - complete human and coding-AI project guide
