@@ -48,13 +48,13 @@ pub struct AgentHostConfig {
 	pub connection_token_file: Option<String>,
 }
 
-/// State of the running VS Code server process.
+/// State of the running Pointer server process.
 struct RunningServer {
 	child: tokio::process::Child,
 	commit: String,
 }
 
-/// Manages the VS Code server lifecycle: on-demand start, auto-restart
+/// Manages the Pointer server lifecycle: on-demand start, auto-restart
 /// after idle shutdown, and background update checking.
 pub struct AgentHostManager {
 	log: log::Logger,

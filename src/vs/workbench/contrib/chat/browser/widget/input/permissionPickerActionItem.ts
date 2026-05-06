@@ -28,7 +28,7 @@ import { IOpenerService } from '../../../../../../platform/opener/common/opener.
 import { URI } from '../../../../../../base/common/uri.js';
 import { IStorageService, StorageScope, StorageTarget } from '../../../../../../platform/storage/common/storage.js';
 
-// Track whether warnings have been shown this VS Code session
+// Track whether warnings have been shown this Pointer session
 const shownWarnings = new Set<ChatPermissionLevel>();
 
 import { AUTOPILOT_DONT_SHOW_AGAIN_KEY, AUTO_APPROVE_DONT_SHOW_AGAIN_KEY } from '../../../common/chatPermissionStorageKeys.js';

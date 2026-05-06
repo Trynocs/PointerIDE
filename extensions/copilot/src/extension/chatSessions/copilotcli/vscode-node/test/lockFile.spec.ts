@@ -18,7 +18,7 @@ vi.mock('vscode', async (importOriginal) => {
 			isTrusted: true,
 		},
 		env: {
-			appName: 'Visual Studio Code',
+			appName: 'Pointer',
 		},
 	};
 });

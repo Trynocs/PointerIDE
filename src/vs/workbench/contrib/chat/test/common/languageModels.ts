@@ -97,7 +97,14 @@ export class NullLanguageModelsService implements ILanguageModelsService {
 
 	}
 
+	async updateLanguageModelsProviderGroup(existing: ILanguageModelsProviderGroup, name: string, vendorId: string, configuration: IStringDictionary<unknown> | undefined): Promise<void> {
+	}
+
 	async removeLanguageModelsProviderGroup(vendorId: string, providerGroupName: string): Promise<void> {
+	}
+
+	async testProviderConnection(vendorId: string, configuration: IStringDictionary<unknown> | undefined) {
+		return { success: false, models: [], error: 'Not implemented.' };
 	}
 
 	async migrateLanguageModelsProviderGroup(languageModelsProviderGroup: ILanguageModelsProviderGroup): Promise<void> { }

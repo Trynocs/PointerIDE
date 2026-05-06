@@ -51,7 +51,7 @@ pub struct AgentHostLockData {
 	pub tunnel_name: Option<String>,
 }
 
-/// Runs a local agent host server. Downloads the latest VS Code server on
+/// Runs a local agent host server. Downloads the latest Pointer server on
 /// demand, starts it with `--enable-remote-auto-shutdown`, and proxies
 /// WebSocket connections from a local TCP port to the server's agent host
 /// socket. The server auto-shuts down when idle; the CLI checks for updates

@@ -150,7 +150,7 @@ function buildHookProperties(target: Target, arraySchema: IJSONSchema): Record<s
 }
 
 /**
- * Hook properties for the VS Code format.
+ * Hook properties for the Pointer format.
  */
 const vscodeHookProperties: Record<string, IJSONSchema> = buildHookProperties(Target.VSCode, hookArraySchema);
 
@@ -242,7 +242,7 @@ export const hookFileSchema: IJSONSchema = {
 		}
 	},
 	else: {
-		// VS Code / PascalCase format
+		// Pointer / PascalCase format
 		properties: {
 			hooks: {
 				properties: vscodeHookProperties

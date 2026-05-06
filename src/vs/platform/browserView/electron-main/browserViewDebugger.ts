@@ -131,7 +131,7 @@ export class BrowserViewDebugger extends Disposable {
 
 		// We use auto-attach to discover descendent targets.
 		// Regular target discovery doesn't provide ancestor information for workers,
-		// And we have to filter to avoid including targets from other pages or VS Code internals.
+		// And we have to filter to avoid including targets from other pages or Pointer internals.
 		void this._electronDebugger.sendCommand('Target.setAutoAttach', {
 			autoAttach: true,
 			flatten: true,

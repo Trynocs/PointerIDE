@@ -341,11 +341,11 @@ export class StartDebuggingPrompt extends PromptElement<StartDebuggingPromptProp
 				<SystemMessage priority={1000}>
 					{style === OutputStyle.ConfigOnly ? (
 						<>
-							You are a Visual Studio Code assistant who specializes in debugging and creating launch configurations. Your task is to create a launch configuration for the user's query.<br />
+							You are a Pointer assistant who specializes in debugging and creating launch configurations. Your task is to create a launch configuration for the user's query.<br />
 						</>
 					) : (
 						<>
-							You are a Visual Studio Code assistant who specializes in debugging, searching for existing launch configurations, and creating launch configurations. Your task is to find an existing launch configuration that matches the query or to create a launch configuration for the user's query if no match is found. If there's no query, still provide a response, checking for existing configurations in the launch.json file, if any.<br />
+							You are a Pointer assistant who specializes in debugging, searching for existing launch configurations, and creating launch configurations. Your task is to find an existing launch configuration that matches the query or to create a launch configuration for the user's query if no match is found. If there's no query, still provide a response, checking for existing configurations in the launch.json file, if any.<br />
 						</>
 					)}
 					<CopilotIdentityRules />
@@ -356,7 +356,7 @@ export class StartDebuggingPrompt extends PromptElement<StartDebuggingPromptProp
 						{style === OutputStyle.Readable && <>
 							The user cannot see the context you are given, so you must not mention it. If you want to refer to it, you must include it in your reply.<br />
 						</>}
-						Print out the VS Code `launch.json` file needed to debug the command, formatted as JSON.<br />
+						Print out the Pointer `launch.json` file needed to debug the command, formatted as JSON.<br />
 						If there are build steps needed before the program can be debugged, be sure to include a `preLaunchTask` property in the launch configuration.
 						If you include a `preLaunchTask` property, {state.resources?.some(r => r.path.endsWith('launch.json'))
 							? <>{' '}it must either refer to an existing a suitable task in the `tasks.json` file, or you must include a `tasks.json` file in your response that contains that configuration.</>
@@ -372,14 +372,14 @@ export class StartDebuggingPrompt extends PromptElement<StartDebuggingPromptProp
 						- type: the type of debugger to use for this launch configuration. Every installed debug extension introduces a type: node for the built-in Node debugger, for example, or php and go for the PHP and Go extensions.<br />
 						- request:  the request type of this launch configuration. Currently, launch and attach are supported.<br />
 						- name:  the reader-friendly name to appear in the Debug launch configuration dropdown.<br />
-						If a result is not a valid answer, but it still relates to Visual Studio Code, please still respond.<br />
+						If a result is not a valid answer, but it still relates to Pointer, please still respond.<br />
 						Please do not guess a response and instead just respond with a polite apology if you are unsure.<br />
 						If you believe the given context given to you is incorrect or not relevant you may ignore it.<br />
 						{getLaunchConfigExamples(this.props.input.type, style)}<br />
 					</InstructionMessage>
 				</HistoryWithInstructions>
 				<UserMessage priority={700}>
-					{state.docSearchResults && state.docSearchResults.length > 0 && <>Below is a list of information from the Visual Studio Code documentation which might be relevant to the question. <br /></>}
+					{state.docSearchResults && state.docSearchResults.length > 0 && <>Below is a list of information from the Pointer documentation which might be relevant to the question. <br /></>}
 					{state.docSearchResults && state.docSearchResults.map((result) => {
 						if (result?.title && result.contents) {
 							// eslint-disable-next-line local/code-no-unused-expressions
@@ -573,7 +573,7 @@ class ReferenceFilesFromQueryPrompt extends PromptElement<{
 		return (
 			<>
 				<SystemMessage priority={10}>
-					You are a Visual Studio Code assistant who specializes in debugging and creating launch configurations. Your job is to return an array of file names that may contain useful information to translate a user query into a VS Code debug configuration.<br />
+					You are a Pointer assistant who specializes in debugging and creating launch configurations. Your job is to return an array of file names that may contain useful information to translate a user query into a Pointer debug configuration.<br />
 					The user will give you a file tree. Make sure to fully qualify paths you return from the tree, including their parent directories:<br />
 					Do not give any other explanation and return only a JSON array of strings. Avoid wrapping the whole response in triple backticks. Do not include any other information in your response.<br />
 					<TextChunk priority={8}>
@@ -631,7 +631,7 @@ class ReferenceFilesFromCliPrompt extends PromptElement<{
 		return (
 			<>
 				<SystemMessage priority={10}>
-					You are a Visual Studio Code assistant who specializes in debugging and creating launch configurations. Your job is to return an array of file names that may contain useful information to translate a command line invocation into a VS Code debug configuration and build task.<br />
+					You are a Pointer assistant who specializes in debugging and creating launch configurations. Your job is to return an array of file names that may contain useful information to translate a command line invocation into a Pointer debug configuration and build task.<br />
 					For example, when running a command `make tests`, you should ask for the `Makefile` because it contains information about how the tests are run.<br />
 					The user will give you a file tree. Make sure to fully qualify paths you return from the tree, including their parent directories:<br />
 					Do not give any other explanation and return only a JSON array of strings. Avoid wrapping the whole response in triple backticks. Do not include any other information in your response.<br />
@@ -702,7 +702,7 @@ class DebugTypePrompt extends PromptElement<{
 		return (
 			<>
 				<SystemMessage priority={10}>
-					You are a Visual Studio Code assistant. Your job is to assist users in using Visual Studio Code by providing knowledge to accomplish their task. Please do not guess a response and instead just respond with a polite apology if you are unsure.<br />
+					You are a Pointer assistant. Your job is to assist users in using Pointer by providing knowledge to accomplish their task. Please do not guess a response and instead just respond with a polite apology if you are unsure.<br />
 					You are a debugging expert. Your job is to return the debug type to use for launch config for the given use case.<br />
 					Pay attention to my operating system and suggest the best tool for the platform I'm working on. For example, for debugging native code on Windows, you would not suggest the `lldb` type.<br />
 					{this.props.input.type === StartDebuggingType.CommandLine && <>The command I give you is used to run code that I'm working on. Although the command itself might not directly be my program, you should suggest a tool to debug the likely language I'm working in.<br /></>}

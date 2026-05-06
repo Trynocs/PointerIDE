@@ -1,6 +1,6 @@
 ## tool call s-test: Usage Guide
 
-This folder contains the tool call simulation test (s-test) harness for running and debugging tool invocations in the VS Code Copilot repo.
+This folder contains the tool call simulation test (s-test) harness for running and debugging tool invocations in the Pointer Copilot repo.
 
 ---
 
@@ -24,13 +24,13 @@ Structure of the JSON:
 
 ## Running tool call s-test
 
-You can run the tool call s-test from the terminal or from VS Code using launch configurations.
+You can run the tool call s-test from the terminal or from Pointer using launch configurations.
 
-### 1. From VS Code: Debugging
+### 1. From Pointer: Debugging
 
 You can debug the tool call s-test using the built-in launch configuration:
 
-1. Open the Run & Debug panel in VS Code (`Ctrl+Shift+D`).
+1. Open the Run & Debug panel in Pointer (`Ctrl+Shift+D`).
 2. Select **"Run tool call s-test"** from the configuration dropdown.
 3. Press **F5** to start debugging.
 

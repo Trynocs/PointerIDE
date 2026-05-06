@@ -29,7 +29,7 @@ export class TitlePrompt extends PromptElement<TitlePromptProps> {
 					- Git rebase question<br />
 					- Install Python packages<br />
 					- LinkedList implementation location<br />
-					- Add VS Code tree view<br />
+					- Add Pointer tree view<br />
 					- React useState usage
 				</SystemMessage>
 				<UserMessage priority={900}>

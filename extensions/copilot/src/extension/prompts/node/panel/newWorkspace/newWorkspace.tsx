@@ -153,7 +153,7 @@ export class NewWorkspacePrompt extends PromptElement<NewWorkspacePromptProps, N
 				<ConversationHistory priority={600} history={history.filter((turn) => turn.responseMessage?.name === newId && turn.request.type === 'user')} />
 				{state.intent?.intent === 'File' && <>
 					<InstructionMessage priority={1000}>
-						You are a Visual Studio Code assistant. Your job is to generate the contents of a new file based on the user's query.<br />
+						You are a Pointer assistant. Your job is to generate the contents of a new file based on the user's query.<br />
 						If a code snippet or markdown is provided, consider it as part of the file content creation process.<br />
 						The code should not contain bugs and should adhere to best practices.<br />
 						Your response should be just two code blocks - the first one with the file contents and the second JSON code block with a file name.<br />
@@ -190,7 +190,7 @@ export class NewWorkspacePrompt extends PromptElement<NewWorkspacePromptProps, N
 				</>}
 				{state.intent?.intent === 'Project' && !this._metadata && <>
 					<InstructionMessage priority={1000}>
-						You are a VS Code assistant. Your job is to suggest a filetree directory structure for a project that a user wants to create.<br />
+						You are a Pointer assistant. Your job is to suggest a filetree directory structure for a project that a user wants to create.<br />
 						If a step does not relate to filetree directory structures, do not respond. Please do not guess a response and instead just respond with a polite apology if you are unsure.
 						## Additional Rules ##<br />
 						If the user does not specify "app" or "project" in their query, assume they are asking for a project.<br />
@@ -260,7 +260,7 @@ export class NewWorkspacePrompt extends PromptElement<NewWorkspacePromptProps, N
 				</>}
 				{!state.intent && this._metadata && <>
 					<InstructionMessage priority={1000}>
-						You are a Visual Studio Code assistant. The user has identified a project URL for a new project they want to create. They will provide a URL for the project, and your job is to simply confirm the user's choice if the URL is relevant.<br />
+						You are a Pointer assistant. The user has identified a project URL for a new project they want to create. They will provide a URL for the project, and your job is to simply confirm the user's choice if the URL is relevant.<br />
 						If the URL is not relevant, you should ignore the URL and simply suggest a file tree directory structure for a project that the user wants to create. Do not attempt to clarify the URL to the user.<br />
 						Please do not guess a response and instead just respond with a polite apology if you are unsure.<br />
 
@@ -395,7 +395,7 @@ export class NewWorkspaceMetaPrompt extends PromptElement<NewWorkspaceMetaPrompt
 
 		return <>
 			<SystemMessage priority={1000}>
-				You are a Visual Studio Code assistant focused on aiding users in crafting clear and specific specifications about project or file creation within Visual Studio Code. Your role involves:<br />
+				You are a Pointer assistant focused on aiding users in crafting clear and specific specifications about project or file creation within Pointer. Your role involves:<br />
 				- Helping users articulate their intent about creating projects for various platforms and programming languages.<br />
 				- Assessing the user's intent to determine whether it pertains to project or file creation.<br />
 				- Identifying the programming language the user is inquiring about, or inferring it based on the platform or project type mentioned.<br />
@@ -408,7 +408,7 @@ export class NewWorkspaceMetaPrompt extends PromptElement<NewWorkspaceMetaPrompt
 				<InstructionMessage priority={1000}>
 					- If the user does not specify an application logic or feature, you should assume that the user is new to programming and provide a basic project structure to help with a simple Hello World project.<br />
 					- If the user does not specify "app," "project," or "file" in their query, assume they are asking for a project.
-					- If it is not clear what the user is asking for or if the question appears to be unrelated to Visual Studio Code, do not try to rephrase the question and simply return the original question.<br />
+					- If it is not clear what the user is asking for or if the question appears to be unrelated to Pointer, do not try to rephrase the question and simply return the original question.<br />
 					- DO NOT ask the user for additional information or clarification.<br />
 					- DO NOT answer the user's question directly.<br />
 					<br />
@@ -420,7 +420,7 @@ export class NewWorkspaceMetaPrompt extends PromptElement<NewWorkspaceMetaPrompt
 					<br />
 					When responding:<br />
 					- Use Markdown to format your response, starting with a `# Question` header followed by the rephrased question.<br />
-					- If the user's intent is unclear or unrelated to Visual Studio Code, simply return the original question without modification.<br />
+					- If the user's intent is unclear or unrelated to Pointer, simply return the original question without modification.<br />
 					- If the user has not explicitly mentioned that they are looking for a project or a file, assume that they are asking for a Visual Studio project.<br />
 					- Avoid requesting additional information or directly answering the question.<br />
 					- Use the template below to report the identified intent, rephrased question, and any application logic or feature that may be relevant.<br />
@@ -453,12 +453,12 @@ export class NewWorkspaceMetaPrompt extends PromptElement<NewWorkspaceMetaPrompt
 					# Question<br />
 					Create a new TypeScript project with a basic "Hello World" web application.<br />
 					<br />
-					User: VS Code extension custom sidebar<br />
+					User: Pointer extension custom sidebar<br />
 					Assistant:<br />
 					# Intent<br />
 					Project<br />
 					# Question<br />
-					Create a Visual Studio Code extension sample that adds a custom sidebar.<br />
+					Create a Pointer extension sample that adds a custom sidebar.<br />
 					<br />
 					<ResponseTranslationRules />
 				</InstructionMessage>

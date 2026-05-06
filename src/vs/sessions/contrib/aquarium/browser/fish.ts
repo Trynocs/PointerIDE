@@ -3,15 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { VSCODE_LOGO_PATH } from './vscodeLogoPath.js';
+import { POINTER_LOGO_PATH } from './vscodeLogoPath.js';
 
 /**
- * VS Code logo "fish" used by the Agents window aquarium. Each fish is a small
+ * Pointer logo "fish" used by the Agents window aquarium. Each fish is a small
  * SVG element styled with `color:` so the silhouette inherits via `currentColor`,
  * with animated body strips providing the swimming motion.
  */
 
-/** The three VS Code release channel colors used as fish "species". */
+/** The Pointer monochrome colors used as fish "species". */
 export const enum FishSpecies {
 	Stable = 'stable',
 	Insiders = 'insiders',
@@ -19,9 +19,9 @@ export const enum FishSpecies {
 }
 
 const SPECIES_COLOR: Record<FishSpecies, string> = {
-	[FishSpecies.Stable]: '#007ACC',
-	[FishSpecies.Insiders]: '#24bfa5',
-	[FishSpecies.Exploration]: '#E04F00',
+	[FishSpecies.Stable]: '#F0F0F0',
+	[FishSpecies.Insiders]: '#D8D8D8',
+	[FishSpecies.Exploration]: '#484848',
 };
 
 /** Pick a random species, weighted Stable > Insiders > Exploration. */
@@ -155,7 +155,7 @@ const BODY_X_END = 90;
 
 /**
  * Lazily-built shared SVG element holding both the strip clipPath defs AND
- * a single `<symbol>` containing the VS Code logo path. All fish reference
+ * a single `<symbol>` containing the Pointer logo path. All fish reference
  * these via `clip-path: url(#…)` and `<use href="#…">` instead of duplicating
  * the path data per strip per fish (which previously caused 50 fish * 10
  * strips = 500 path parses on every aquarium activation).
@@ -187,7 +187,7 @@ function ensureSharedDefs(targetDocument: Document): void {
 
 	// All strips reference this symbol via `<use href="#agents-aquarium-fish-logo">`,
 	// so the path data is parsed exactly ONCE per session instead of FISH_COUNT * NUM_STRIPS.
-	container.appendChild(createVSCodeLogoSymbol(targetDocument));
+	container.appendChild(createPointerLogoSymbol(targetDocument));
 
 	const defs = targetDocument.createElementNS(SVG_NS, 'defs');
 	for (let i = 0; i < NUM_BODY_STRIPS; i++) {
@@ -209,14 +209,14 @@ function ensureSharedDefs(targetDocument: Document): void {
 	sharedDefsByDocument.set(targetDocument, container);
 }
 
-function createVSCodeLogoSymbol(targetDocument: Document): SVGSymbolElement {
+function createPointerLogoSymbol(targetDocument: Document): SVGSymbolElement {
 	const symbol = targetDocument.createElementNS(SVG_NS, 'symbol');
 	symbol.setAttribute('id', SHARED_LOGO_SYMBOL_ID);
 	symbol.setAttribute('viewBox', '0 0 96 96');
 	symbol.setAttribute('overflow', 'visible');
 
 	const logoPath = targetDocument.createElementNS(SVG_NS, 'path');
-	logoPath.setAttribute('d', VSCODE_LOGO_PATH);
+	logoPath.setAttribute('d', POINTER_LOGO_PATH);
 	logoPath.setAttribute('fill', 'currentColor');
 	logoPath.setAttribute('fill-rule', 'evenodd');
 	symbol.appendChild(logoPath);
@@ -226,7 +226,7 @@ function createVSCodeLogoSymbol(targetDocument: Document): SVGSymbolElement {
 
 /**
  * Build the inline SVG element tree for a fish:
- *   - VS Code logo body, sliced into N vertical strips that each oscillate in
+ *   - Pointer logo body, sliced into N vertical strips that each oscillate in
  *     Y with a phase-offset CSS animation (the "swimming" sine wave)
  *
  * Colors come from `currentColor` on the parent element. Built with
@@ -241,7 +241,7 @@ function buildFishSvg(targetDocument: Document): SVGSVGElement {
 	const svg = targetDocument.createElementNS(SVG_NS, 'svg');
 	svg.setAttribute('xmlns', SVG_NS);
 	svg.setAttribute('focusable', 'false');
-	// viewBox 0..96 matches the original VS Code icon.
+	// viewBox 0..96 matches the Pointer icon.
 	svg.setAttribute('viewBox', '0 0 96 96');
 	svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 	// Tell the rasterizer to optimize for visual quality, not speed: smoother

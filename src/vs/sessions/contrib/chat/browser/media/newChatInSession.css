@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-/* Overrides for the new-chat-in-session view to match VS Code chat input styling */
+/* Overrides for the new-chat-in-session view to match Pointer chat input styling */
 
 /* Position the input at the bottom of the view */
 .new-chat-in-session .new-chat-widget-container,
@@ -12,7 +12,7 @@
 	padding: 0;
 }
 
-/* Match VS Code interactive-input-part layout */
+/* Match Pointer interactive-input-part layout */
 .new-chat-in-session .new-chat-widget-content {
 	width: 100%;
 	max-width: 950px;
@@ -28,7 +28,7 @@
 .new-chat-in-session .new-chat-input-area {
 	max-width: 950px;
 }
-/* Match VS Code interactive-input-part margin and padding */
+/* Match Pointer interactive-input-part margin and padding */
 .new-chat-in-session .new-chat-input-container {
 	margin-top: 0;
 }
@@ -52,7 +52,7 @@
 	border-radius: var(--vscode-cornerRadius-large, 8px) var(--vscode-cornerRadius-large, 8px) 0 0;
 }
 
-/* Bottom container: match VS Code secondary toolbar */
+/* Bottom container: match Pointer secondary toolbar */
 .new-chat-in-session .new-chat-bottom-container {
 	padding: 0 4px 0 5px;
 	margin-top: 4px;
@@ -64,7 +64,7 @@
 	gap: 6px;
 }
 
-/* Input toolbar: match VS Code chat-input-toolbars gap */
+/* Input toolbar: match Pointer chat-input-toolbars gap */
 .new-chat-in-session .sessions-chat-toolbar {
 	margin-top: 4px;
 	padding: 0px;
@@ -76,7 +76,7 @@
 	gap: 6px;
 }
 
-/* Picker labels: match VS Code chat-secondary-toolbar sizing for all pickers */
+/* Picker labels: match Pointer chat-secondary-toolbar sizing for all pickers */
 .new-chat-in-session .new-chat-bottom-container .action-label,
 .new-chat-in-session .sessions-chat-toolbar .action-label {
 	height: 16px;

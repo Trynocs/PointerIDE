@@ -41,7 +41,7 @@ if (typeof originalState.scrollProgress !== 'undefined' && originalState?.resour
 	state.scrollProgress = 0;
 }
 
-// Make sure to sync VS Code state here
+// Make sure to sync Pointer state here
 vscode.setState(state);
 
 const messaging = createPosterForVsCode(vscode, settings);
@@ -93,7 +93,7 @@ onceDocumentLoaded(() => {
 			scrollDisabledCount = 1;
 			if (scrollDisabledTimer) { clearTimeout(scrollDisabledTimer); }
 			scrollDisabledTimer = window.setTimeout(() => { scrollDisabledCount = 0; }, 200);
-			// Always set scroll of at least 1 to prevent VS Code's webview code from auto scrolling us
+			// Always set scroll of at least 1 to prevent Pointer's webview code from auto scrolling us
 			const scrollToY = Math.max(1, scrollProgress * document.body.clientHeight);
 			window.scrollTo(0, scrollToY);
 		});
@@ -368,7 +368,7 @@ document.addEventListener('click', event => {
 				}
 			}
 
-			// If original link doesn't look like a url, delegate back to VS Code to resolve
+			// If original link doesn't look like a url, delegate back to Pointer to resolve
 			if (hrefText && !/^[a-z\-]+:/i.test(hrefText)) {
 				messaging.postMessage('openLink', { href: hrefText });
 				event.preventDefault();

@@ -39,7 +39,7 @@ const REMOTE_HOST_GROUP = 'remote-host';
 const REMOTE_CLIENT_GROUP = 'remote-client';
 
 /**
- * Returns `true` for the synthetic "VS Code Synced Data" bundle plugin,
+ * Returns `true` for the synthetic "Pointer Synced Data" bundle plugin,
  * which is an implementation detail of the customization sync pipeline
  * and should not be surfaced as a standalone item in the UI.
  */

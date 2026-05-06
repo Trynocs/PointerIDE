@@ -148,7 +148,7 @@ function createTestRequest(prompt: string): TestChatRequest {
 
 /**
  * Adds a session item to the controller's items map.
- * This simulates what newChatSessionItemHandler does when VS Code creates a new session.
+ * This simulates what newChatSessionItemHandler does when Pointer creates a new session.
  */
 function seedSessionItem(sessionId: string): void {
 	const resource = ClaudeSessionUri.forSessionId(sessionId);

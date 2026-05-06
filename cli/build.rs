@@ -172,7 +172,7 @@ fn apply_win32_version_resources() {
 	let name_long = product
 		.get("nameLong")
 		.and_then(|v| v.as_str())
-		.unwrap_or("Code - OSS");
+		.unwrap_or("Pointer");
 	let application_name = product
 		.get("applicationName")
 		.and_then(|v| v.as_str())
@@ -188,8 +188,8 @@ fn apply_win32_version_resources() {
 	let mut res = winresource::WindowsResource::new();
 	res.set("ProductName", name_long);
 	res.set("FileDescription", name_long);
-	res.set("CompanyName", "Microsoft Corporation");
-	res.set("LegalCopyright", "Copyright (C) 2026 Microsoft. All rights reserved");
+	res.set("CompanyName", "Pointer Team");
+	res.set("LegalCopyright", "Copyright (C) 2026 Pointer Team");
 	res.set("FileVersion", &package_json.version);
 	res.set("ProductVersion", &package_json.version);
 	res.set("InternalName", &exe_name);

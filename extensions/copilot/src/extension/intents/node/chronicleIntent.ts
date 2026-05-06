@@ -548,7 +548,7 @@ Use the session_store_sql tool to run queries. Start with a broad query, then dr
 	private _getSchemaDescription(hasCloud: boolean): string {
 		return hasCloud
 			? `Available tables (cloud SQL syntax):
-- **sessions**: id, repository, branch, summary, agent_name (who created the session, e.g. 'VS Code', 'cli', 'Copilot Coding Agent', 'Copilot Code Review'), agent_description, created_at, updated_at (TIMESTAMP). NOTE: cwd is always NULL in the cloud. IMPORTANT: Always filter on **updated_at** (not created_at) for time ranges — some session types have created_at set to epoch zero. NOTE: summary and repository/branch may be NULL — always JOIN with turns to get actual content.
+- **sessions**: id, repository, branch, summary, agent_name (who created the session, e.g. 'Pointer', 'cli', 'Copilot Coding Agent', 'Copilot Code Review'), agent_description, created_at, updated_at (TIMESTAMP). NOTE: cwd is always NULL in the cloud. IMPORTANT: Always filter on **updated_at** (not created_at) for time ranges — some session types have created_at set to epoch zero. NOTE: summary and repository/branch may be NULL — always JOIN with turns to get actual content.
 - **turns**: session_id, turn_index, user_message, assistant_response, timestamp (TIMESTAMP). The richest and most reliable source of what actually happened — the first turn (turn_index=0) user_message is effectively the session summary. Always JOIN sessions with turns for meaningful results.
 - **session_files**: session_id, file_path, tool_name, turn_index. Tracks which files were read/edited and which tools were used.
 - **session_refs**: session_id, ref_type (commit/pr/issue), ref_value, turn_index. Tracks PRs created, issues referenced, commits made.

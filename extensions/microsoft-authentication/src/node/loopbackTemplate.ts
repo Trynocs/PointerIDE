@@ -111,8 +111,8 @@ export const loopbackTemplate = `
 </head>
 
 <body>
-	<a class="branding" href="https://code.visualstudio.com/">
-		Visual Studio Code
+	<a class="branding" href="https://github.com/pointer-editor/pointer">
+		Pointer
 	</a>
 	<div class="message-container">
 		<div class="message">

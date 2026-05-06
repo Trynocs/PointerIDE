@@ -58,6 +58,7 @@ type BuildTarget = 'desktop' | 'server' | 'server-web' | 'web';
 const SRC_DIR = 'src';
 const OUT_DIR = 'out';
 const OUT_VSCODE_DIR = 'out-vscode';
+const WATCH_READY_MARKER = path.join(REPO_ROOT, '.build', 'watch-client-transpile-ready');
 
 // UTF-8 BOM - added to test files with 'utf8' in the path (matches gulp build behavior)
 const UTF8_BOM = Buffer.from([0xef, 0xbb, 0xbf]);
@@ -1083,6 +1084,8 @@ ${tslib}`,
 async function watch(): Promise<void> {
 	if (!useEsbuildTranspile) {
 		console.log('Starting transpilation...');
+		await fs.promises.mkdir(path.dirname(WATCH_READY_MARKER), { recursive: true });
+		await fs.promises.writeFile(WATCH_READY_MARKER, new Date().toISOString());
 		console.log('Finished transpilation with 0 errors after 0 ms');
 		console.log('[watch] esbuild transpile disabled (useEsbuildTranspile=false). Keeping process alive as no-op.');
 		await new Promise(() => { }); // keep alive
@@ -1094,6 +1097,7 @@ async function watch(): Promise<void> {
 	const outDir = OUT_DIR;
 
 	// Initial setup
+	await fs.promises.rm(WATCH_READY_MARKER, { force: true });
 	await cleanDir(outDir);
 	console.log(`[transpile] ${SRC_DIR} → ${outDir}`);
 
@@ -1102,8 +1106,11 @@ async function watch(): Promise<void> {
 	try {
 		await transpile(outDir, false);
 		await copyAllNonTsFiles(outDir, false);
+		await fs.promises.mkdir(path.dirname(WATCH_READY_MARKER), { recursive: true });
+		await fs.promises.writeFile(WATCH_READY_MARKER, new Date().toISOString());
 		console.log(`Finished transpilation with 0 errors after ${Date.now() - t1} ms`);
 	} catch (err) {
+		await fs.promises.rm(WATCH_READY_MARKER, { force: true });
 		console.error('[watch] Initial build failed:', err);
 		console.log(`Finished transpilation with 1 errors after ${Date.now() - t1} ms`);
 		// Continue watching anyway

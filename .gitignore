@@ -46,3 +46,11 @@ dist
 .github/prompts/*.local.prompt.md
 .agents/skills/.local/
 .github/skills/.local/
+
+# Local agent/tool runtimes and scratch files
+.codex-tools/
+.opencode/node_modules/
+pntr_b64.txt
+pntr_w_b64.txt
+_validate_json.cjs
+nul

@@ -388,10 +388,10 @@ describe('CopilotCLISessionService', () => {
 			const sessionId = 'rename-inactive';
 			manager.sessions.set(sessionId, new MockCliSdkSession(sessionId, new Date()));
 
-			await service.renameSession(sessionId, 'Renamed From VS Code');
+			await service.renameSession(sessionId, 'Renamed From Pointer');
 
-			expect(manager.sessions.get(sessionId)?.title).toBe('Renamed From VS Code');
-			expect(await service.getSessionTitle(sessionId, CancellationToken.None)).toBe('Renamed From VS Code');
+			expect(manager.sessions.get(sessionId)?.title).toBe('Renamed From Pointer');
+			expect(await service.getSessionTitle(sessionId, CancellationToken.None)).toBe('Renamed From Pointer');
 		});
 
 		it('renames an active wrapped session through copilot/sdk', async () => {

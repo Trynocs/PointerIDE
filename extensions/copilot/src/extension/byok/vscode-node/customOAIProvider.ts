@@ -46,6 +46,7 @@ export function hasExplicitApiPath(url: string): boolean {
 
 export interface CustomOAIModelProviderConfig extends LanguageModelChatConfiguration {
 	url?: string;
+	baseUrl?: string;
 	models?: CustomOAIModelConfig[];
 }
 
@@ -114,7 +115,7 @@ export abstract class AbstractCustomOAIBYOKModelProvider extends AbstractOpenAIC
 	}
 
 	protected override async getAllModels(silent: boolean, apiKey: string | undefined, configuration: CustomOAIModelProviderConfig | undefined): Promise<OpenAICompatibleLanguageModelChatInformation<CustomOAIModelProviderConfig>[]> {
-		if (configuration?.url) {
+		if (configuration?.url || configuration?.baseUrl) {
 			return super.getAllModels(silent, apiKey, configuration);
 		}
 		const models: OpenAICompatibleLanguageModelChatInformation<CustomOAIModelProviderConfig>[] = [];
@@ -145,6 +146,8 @@ export abstract class AbstractCustomOAIBYOKModelProvider extends AbstractOpenAIC
 			zeroDataRetentionEnabled: modelConfiguration?.zeroDataRetentionEnabled
 		};
 		const modelInfo = resolveModelInfo(model.id, this._name, undefined, modelCapabilities);
+		modelInfo.authType = model.configuration?.authType ?? (model.configuration?.apiKey ? 'bearer' : 'none');
+		modelInfo.authHeaderName = model.configuration?.customHeaderName;
 		if (modelCapabilities?.url?.includes('/responses')) {
 			modelInfo.supported_endpoints = [
 				ModelSupportedEndpoint.ChatCompletions,
@@ -155,7 +158,7 @@ export abstract class AbstractCustomOAIBYOKModelProvider extends AbstractOpenAIC
 	}
 
 	protected getModelsBaseUrl(configuration: CustomOAIModelProviderConfig | undefined): string | undefined {
-		return configuration?.url;
+		return configuration?.baseUrl ?? configuration?.url;
 	}
 
 	protected abstract resolveUrl(modelId: string, url: string): string;

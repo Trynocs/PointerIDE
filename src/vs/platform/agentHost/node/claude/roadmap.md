@@ -126,7 +126,7 @@ interface ICopilotApiService {
 
 **Learnings from implementation:**
 
-1. **VS Code DI constructor ordering:** `GetLeadingNonServiceArgs` strips
+1. **Pointer DI constructor ordering:** `GetLeadingNonServiceArgs` strips
    `BrandedService`-decorated params from the **end** of the tuple, so
    non-service params (like `fetchFn`) must come **first** in the constructor.
    Putting them after service params causes `createInstance` to select the

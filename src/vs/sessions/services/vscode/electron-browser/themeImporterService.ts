@@ -21,7 +21,7 @@ import { IThemeImporterService, COLOR_THEME_SETTINGS_ID } from '../common/themeI
 import { INativeWorkbenchEnvironmentService } from '../../../../workbench/services/environment/electron-browser/environmentService.js';
 
 /**
- * Describes a color theme from the parent VS Code installation.
+ * Describes a color theme from the parent Pointer installation.
  */
 interface IParentThemeInfo {
 	/** The settingsId of the theme (e.g. "Dark Modern", "Monokai"). */
@@ -158,13 +158,13 @@ class ThemeImporterService extends Disposable implements IThemeImporterService {
 
 			return { settingsId, extensionLocation };
 		} catch (err) {
-			this.logService.warn('[VSCodeThemeImporter] Failed to resolve VS Code theme:', err);
+			this.logService.warn('[VSCodeThemeImporter] Failed to resolve Pointer theme:', err);
 			return undefined;
 		}
 	}
 
 	/**
-	 * Scans the host VS Code's extensions directory to find which extension
+	 * Scans the host Pointer's extensions directory to find which extension
 	 * provides the given theme. Returns the extension location URI, or
 	 * `undefined` if the theme is already available (built-in or installed).
 	 */

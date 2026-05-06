@@ -180,7 +180,7 @@ const policies: ExportedPolicyDataDto = {
 					},
 					{
 						key: 'chat.mcp.access.registry',
-						value: 'Allows access to MCP servers installed from the registry that VS Code is connected to.'
+						value: 'Allows access to MCP servers installed from the registry that Pointer is connected to.'
 					},
 					{
 						key: 'chat.mcp.access.any',
@@ -346,7 +346,7 @@ const policies: ExportedPolicyDataDto = {
 };
 
 const mockProduct: ProductJson = {
-	nameLong: 'Code - OSS',
+	nameLong: 'Pointer',
 	darwinBundleIdentifier: 'com.visualstudio.code.oss',
 	darwinProfilePayloadUUID: 'CF808BE7-53F3-46C6-A7E2-7EDB98A5E959',
 	darwinProfileUUID: '47827DD9-4734-49A0-AF80-7E19B11495CC',

@@ -34,6 +34,7 @@ import { getActiveElement } from '../../../../base/browser/dom.js';
 import { isWeb } from '../../../../base/common/platform.js';
 import { IOnboardingService } from '../../welcomeOnboarding/common/onboardingService.js';
 import { ONBOARDING_STORAGE_KEY } from '../../welcomeOnboarding/common/onboardingTypes.js';
+import { IDefaultAccountService } from '../../../../platform/defaultAccount/common/defaultAccount.js';
 
 export const restoreWalkthroughsConfigurationKey = 'workbench.welcomePage.restorableWalkthroughs';
 export type RestoreWalkthroughsConfigurationValue = { folder: string; category?: string; step?: string };
@@ -95,10 +96,19 @@ export class StartupPageRunnerContribution extends Disposable implements IWorkbe
 		@INotificationService private readonly notificationService: INotificationService,
 		@IContextKeyService private readonly contextKeyService: IContextKeyService,
 		@IOnboardingService private readonly onboardingService: IOnboardingService,
+		@IDefaultAccountService private readonly defaultAccountService: IDefaultAccountService,
 	) {
 		super();
 
-		this.tryShowOnboarding();
+		this._register(this.onboardingService.onDidDismiss(() => {
+			this.storageService.store(ONBOARDING_STORAGE_KEY, true, StorageScope.APPLICATION, StorageTarget.USER);
+		}));
+		this.tryShowOnboarding().then(undefined, onUnexpectedError);
+		this._register(this.defaultAccountService.onDidChangeDefaultAccount(account => {
+			if (!account) {
+				this.tryShowOnboarding().then(undefined, onUnexpectedError);
+			}
+		}));
 		this.run().then(undefined, onUnexpectedError);
 		this._register(this.editorService.onDidCloseEditor((e) => {
 			if (e.editor instanceof GettingStartedInput) {
@@ -231,7 +241,7 @@ export class StartupPageRunnerContribution extends Disposable implements IWorkbe
 		return true; // do not steal focus
 	}
 
-	private tryShowOnboarding(): void {
+	private async tryShowOnboarding(): Promise<void> {
 		if (this.environmentService.skipWelcome) {
 			return; // skip welcome flag is set
 		}
@@ -244,6 +254,12 @@ export class StartupPageRunnerContribution extends Disposable implements IWorkbe
 			return; // experimental onboarding is disabled
 		}
 
+		const defaultAccount = await this.defaultAccountService.getDefaultAccount();
+		if (!defaultAccount) {
+			this.onboardingService.show({ requireSignIn: true });
+			return; // signed-out users should always land in onboarding
+		}
+
 		if (!this.storageService.isNew(StorageScope.APPLICATION)) {
 			return; // only show onboarding for new users who have never used the product before
 		}
@@ -254,11 +270,6 @@ export class StartupPageRunnerContribution extends Disposable implements IWorkbe
 
 		// Show the onboarding overlay on top of the welcome page
 		this.onboardingService.show();
-
-		// Mark onboarding as completed when dismissed
-		this._register(this.onboardingService.onDidDismiss(() => {
-			this.storageService.store(ONBOARDING_STORAGE_KEY, true, StorageScope.APPLICATION, StorageTarget.USER);
-		}));
 	}
 }
 

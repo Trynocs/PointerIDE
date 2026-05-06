@@ -232,7 +232,7 @@ export class SessionsWelcomeContribution extends Disposable implements IWorkbenc
 
 		// When the user signs in, persist completion and finish the walkthrough.
 		// Only auto-complete once the sign-in screen is actually visible — not
-		// during the loading phase — so external account resolution (e.g. VS Code
+		// during the loading phase — so external account resolution (e.g. Pointer
 		// signing in while the Agents loading animation is still showing) cannot
 		// dismiss the overlay before the user has seen or interacted with it.
 		this.overlayRef.value.add(this.defaultAccountService.onDidChangeDefaultAccount(account => {

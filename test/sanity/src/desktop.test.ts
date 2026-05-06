@@ -271,7 +271,7 @@ export function setup(context: TestContext) {
 		];
 		args.push(test.workspaceDir);
 
-		context.log(`Starting VS Code ${entryPoint} with args ${args.join(' ')}`);
+		context.log(`Starting Pointer ${entryPoint} with args ${args.join(' ')}`);
 		const app = await _electron.launch({ executablePath: entryPoint, args });
 		try {
 			const window = await context.getPage(app.firstWindow());

@@ -678,7 +678,7 @@ export class ProtocolServerHandler extends Disposable {
 			return;
 		}
 
-		// VS Code extension methods (not in the typed protocol maps yet)
+		// Pointer extension methods (not in the typed protocol maps yet)
 		const extensionResult = this._handleExtensionRequest(method, params);
 		if (extensionResult) {
 			extensionResult.then(result => {
@@ -694,7 +694,7 @@ export class ProtocolServerHandler extends Disposable {
 	}
 
 	/**
-	 * Handle VS Code extension methods that are not yet part of the typed
+	 * Handle Pointer extension methods that are not yet part of the typed
 	 * protocol. Returns a Promise if the method was recognized, undefined
 	 * otherwise.
 	 */

@@ -151,6 +151,13 @@ class MockLanguageModelsService implements ILanguageModelsService {
 	async removeLanguageModelsProviderGroup(vendorId: string, providerGroupName: string): Promise<void> {
 	}
 
+	async updateLanguageModelsProviderGroup(): Promise<void> {
+	}
+
+	async testProviderConnection() {
+		return { success: false, models: [], error: 'Not implemented.' };
+	}
+
 	async migrateLanguageModelsProviderGroup(languageModelsProviderGroup: ILanguageModelsProviderGroup): Promise<void> { }
 
 	getRecentlyUsedModelIds(): string[] { return []; }

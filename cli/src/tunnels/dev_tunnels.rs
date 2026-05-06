@@ -308,16 +308,16 @@ static HOST_TUNNEL_REQUEST_OPTIONS: LazyLock<TunnelRequestOptions> =
 /// Structure optionally passed into `start_existing_tunnel` to forward an existing tunnel.
 #[derive(Clone, Debug)]
 pub struct ExistingTunnel {
-	/// Name you'd like to assign preexisting tunnel to use to connect to the VS Code Server
+	/// Name you'd like to assign preexisting tunnel to use to connect to the Pointer Server
 	pub tunnel_name: Option<String>,
 
 	/// Token to authenticate and use preexisting tunnel
 	pub host_token: String,
 
-	/// Id of preexisting tunnel to use to connect to the VS Code Server
+	/// Id of preexisting tunnel to use to connect to the Pointer Server
 	pub tunnel_id: String,
 
-	/// Cluster of preexisting tunnel to use to connect to the VS Code Server
+	/// Cluster of preexisting tunnel to use to connect to the Pointer Server
 	pub cluster: String,
 }
 
@@ -340,7 +340,7 @@ impl DevTunnels {
 		}
 	}
 
-	/// Creates a new DevTunnels client used for the Remote Tunnels extension to access the VS Code Server.
+	/// Creates a new DevTunnels client used for the Remote Tunnels extension to access the Pointer Server.
 	pub fn new_remote_tunnel(
 		log: &log::Logger,
 		auth: auth::Auth,

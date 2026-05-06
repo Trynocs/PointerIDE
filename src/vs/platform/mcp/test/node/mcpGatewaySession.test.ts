@@ -239,7 +239,7 @@ suite('McpGatewaySession', () => {
 				resources: { listChanged: true },
 			},
 			serverInfo: {
-				name: 'VS Code MCP Gateway',
+				name: 'Pointer MCP Gateway',
 				version: '1.0.0',
 			},
 		});
@@ -289,14 +289,14 @@ suite('McpGatewaySession', () => {
 			params: {
 				name: 'test_tool',
 				arguments: {
-					name: 'VS Code',
+					name: 'Pointer',
 				},
 			},
 		});
 
 		const callResponse = callResponses[0] as IJsonRpcSuccessResponse;
 		const text = ((callResponse.result as { content: Array<{ text: string }> }).content[0].text);
-		assert.strictEqual(text, 'Hello, VS Code!');
+		assert.strictEqual(text, 'Hello, Pointer!');
 		session.dispose();
 		onDidChangeTools.dispose();
 		onDidChangeResources.dispose();

@@ -45,7 +45,7 @@ export class DebugCommandToConfigConverter implements IDebugCommandToConfigConve
 	}
 
 	/**
-	 * Converts a command run in the given working directory to a VS Code
+	 * Converts a command run in the given working directory to a Pointer
 	 * launch config.
 	 */
 	public async convert(cwd: string, args: readonly string[], token: CancellationToken): Promise<IDebugConfigResult> {

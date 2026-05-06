@@ -114,7 +114,7 @@ export class CreateFileTool implements ICopilotTool<ICreateFileParams> {
 			this.sendTelemetry(options.chatRequestId, modelId, fileExtension);
 		} else {
 			const content = removeLeadingFilepathComment(options.input.content, languageId, options.input.filePath);
-			// When the file has been deleted from disk but VS Code still holds a stale
+			// When the file has been deleted from disk but Pointer still holds a stale
 			// in-memory doc with content, use a full-document replace so the old buffer
 			// is overwritten rather than prepended to (https://github.com/microsoft/vscode/issues/311043).
 			if (!fileExists && doc && doc.getText().length > 0) {

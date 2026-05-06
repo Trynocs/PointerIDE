@@ -352,7 +352,7 @@ export interface SessionState {
 export interface SessionActiveClient {
 	/** Client identifier (matches `clientId` from `initialize`) */
 	clientId: string;
-	/** Human-readable client name (e.g. `"VS Code"`) */
+	/** Human-readable client name (e.g. `"Pointer"`) */
 	displayName?: string;
 	/** Tools this client provides to the session */
 	tools: ToolDefinition[];

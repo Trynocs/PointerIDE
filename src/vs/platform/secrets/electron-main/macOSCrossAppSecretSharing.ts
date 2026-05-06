@@ -38,7 +38,7 @@ interface CrossAppSecretMessage {
 }
 
 /**
- * Coordinates one-time secret migration between the VS Code app and the
+ * Coordinates one-time secret migration between the Pointer app and the
  * agents app using Electron's crossAppIPC (macOS only).
  *
  * **Demand-driven**: Only the agents app initiates migration. If it

@@ -8232,7 +8232,7 @@
           "version": "1.0.5",
           "name": "Infracost (via Github Releases)",
           "documentationURL": "http://github.com/devcontainers-contrib/features/tree/main/src/infracost",
-          "description": "Infracost shows cloud cost estimates for Terraform. It lets engineers see a cost breakdown and understand costs before making changes, either in the terminal, VS Code or pull requests.",
+          "description": "Infracost shows cloud cost estimates for Terraform. It lets engineers see a cost breakdown and understand costs before making changes, either in the terminal, Pointer or pull requests.",
           "options": {
             "version": {
               "default": "latest",
@@ -14722,10 +14722,10 @@
           "majorVersion": "1"
         },
         {
-          "name": "Visual Studio Code CLI",
+          "name": "Pointer CLI",
           "id": "ghcr.io/devcontainers-contrib/features/vscode-cli",
           "version": "1.0.0",
-          "description": "Visual Studio Code CLI (official Microsoft build), which manages the Visual Studio Code Server and vscode.dev tunnels.",
+          "description": "Pointer CLI (official Microsoft build), which manages the Pointer Server and vscode.dev tunnels.",
           "documentationURL": "https://github.com/devcontainers-contrib/features/tree/main/src/vscode-cli",
           "options": {
             "version": {
@@ -14734,17 +14734,17 @@
                 "latest"
               ],
               "default": "latest",
-              "description": "Specify the Visual Studio Code CLI version to install; or \"latest\"; or \"commit:<hash>\""
+              "description": "Specify the Pointer CLI version to install; or \"latest\"; or \"commit:<hash>\""
             }
           },
           "owner": "devcontainers-contrib",
           "majorVersion": "1"
         },
         {
-          "name": "Visual Studio Code Server",
+          "name": "Pointer Server",
           "id": "ghcr.io/devcontainers-contrib/features/vscode-server",
           "version": "1.0.0",
-          "description": "Visual Studio Code Server (official Microsoft build), which hosts Visual Studio Code via HTTP",
+          "description": "Pointer Server (official Microsoft build), which hosts Pointer via HTTP",
           "documentationURL": "https://github.com/devcontainers-contrib/features/tree/main/src/vscode-server",
           "options": {
             "version": {
@@ -14753,7 +14753,7 @@
                 "latest"
               ],
               "default": "latest",
-              "description": "Specify the Visual Studio Code Server version to install; or \"latest\"; or \"commit:<hash>\""
+              "description": "Specify the Pointer Server version to install; or \"latest\"; or \"commit:<hash>\""
             }
           },
           "owner": "devcontainers-contrib",
@@ -22087,7 +22087,7 @@
     {
       "sourceInformation": {
         "name": "Data science with Python and R",
-        "maintainer": "VS Code Data Science",
+        "maintainer": "Pointer Data Science",
         "contact": "https://github.com/microsoft/datascience-py-r/issues",
         "repository": "https://github.com/microsoft/datascience-py-r",
         "ociReference": "ghcr.io/microsoft/datascience-py-r"

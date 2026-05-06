@@ -71,7 +71,7 @@ export class SessionsWalkthroughOverlay extends Disposable {
 	 * Whether the overlay is currently displaying the sign-in buttons.
 	 * Only `true` after the sign-in screen has been fully rendered —
 	 * deliberately `false` during the loading phase so that external
-	 * account resolution (e.g. VS Code signing in) cannot auto-dismiss
+	 * account resolution (e.g. Pointer signing in) cannot auto-dismiss
 	 * the overlay before the user has had a chance to interact.
 	 */
 	get isShowingSignIn(): boolean { return this._isShowingSignIn; }
@@ -342,7 +342,7 @@ export class SessionsWalkthroughOverlay extends Disposable {
 		this._isShowingWelcome = true;
 		this._isShowingThemeStep = true;
 
-		// Start resolving the parent VS Code theme during the fade-out
+		// Start resolving the parent Pointer theme during the fade-out
 		const parentThemePromise = !isWeb
 			? this.themeImporterService.getVSCodeTheme()
 			: Promise.resolve(undefined);
@@ -357,7 +357,7 @@ export class SessionsWalkthroughOverlay extends Disposable {
 			if (!this.overlay.isConnected) {
 				return;
 			}
-			// Only show the VS Code theme option if the parent theme is different from the 4 onboarding themes
+			// Only show the Pointer theme option if the parent theme is different from the 4 onboarding themes
 			const allOnboardingThemes = this.productService.onboardingThemes ?? [];
 			const shownThemes = allOnboardingThemes.filter(t => !t.id.startsWith('solarized'));
 			const parentThemeSettingsId = shownThemes.some(t => t.themeId === parentTheme) ? undefined : parentTheme;
@@ -403,9 +403,9 @@ export class SessionsWalkthroughOverlay extends Disposable {
 			themeCards.push(card);
 		}
 
-		// Show a VS Code theme option as a radio-style button inside the radiogroup
+		// Show a Pointer theme option as a radio-style button inside the radiogroup
 		if (parentThemeSettingsId) {
-			const parentName = this.productService.embedded?.nameShort ?? 'VS Code';
+			const parentName = this.productService.embedded?.nameShort ?? this.productService.nameShort;
 			const option = append(themeGrid, $('.sessions-walkthrough-vscode-theme-option'));
 			vscodeThemeBtn = append(option, $('div.sessions-walkthrough-vscode-theme-radio'));
 			vscodeThemeBtn.setAttribute('role', 'radio');

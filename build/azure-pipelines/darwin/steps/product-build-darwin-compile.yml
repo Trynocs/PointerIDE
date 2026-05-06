@@ -180,7 +180,7 @@ steps:
         artifact: unsigned_vscode_cli_darwin_$(VSCODE_ARCH)_cli
         patterns: "**"
         path: $(Build.ArtifactStagingDirectory)/cli
-      displayName: Download VS Code CLI
+      displayName: Download Pointer CLI
 
     - script: |
         set -e
@@ -363,7 +363,7 @@ steps:
           --skip-release-notes --disable-updates --disable-experiments \
           --disable-workspace-trust
         if [ ! -f "$TIMERS_FILE" ]; then
-          echo "ERROR: VS Code failed to start — startup timers were not written."
+          echo "ERROR: Pointer failed to start — startup timers were not written."
           echo "This may indicate a binary was killed by AMFI due to restricted entitlements."
           exit 1
         fi

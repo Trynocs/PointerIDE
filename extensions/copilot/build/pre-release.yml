@@ -208,7 +208,7 @@ extends:
 
       - task: AzureCLI@2
         inputs:
-          azureSubscription: 'VS Code Development WIF'
+          azureSubscription: 'Pointer Development WIF'
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: npm run setup
@@ -233,20 +233,20 @@ extends:
         displayName: Run simulation tests
 
       - script: xvfb-run -a npm run test:extension
-        displayName: Run extension tests using VS Code
+        displayName: Run extension tests using Pointer
 
       - script: npm run test:prompt
         displayName: Run Completions Core prompt tests
 
       - script: xvfb-run -a npm run test:completions-core
-        displayName: Run Completions Core lib tests using VS Code
+        displayName: Run Completions Core lib tests using Pointer
 
       - script: xvfb-run -a npm run test:sanity
-        displayName: Run extension sanity tests using VS Code
+        displayName: Run extension sanity tests using Pointer
 
     tsa:
       config:
-        areaPath: 'Visual Studio Code Copilot Extensions'
+        areaPath: 'Pointer Copilot Extensions'
         serviceTreeID: '1788a767-5861-45fb-973b-c686b67c5541'
       enabled: true
 

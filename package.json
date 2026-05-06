@@ -1,9 +1,9 @@
 {
-  "name": "code-oss-dev",
+  "name": "pointer-dev",
   "version": "1.119.0",
   "distro": "03ddc71f37189e8ced0ef924fe9b9600c402b67f",
   "author": {
-    "name": "Microsoft Corporation"
+    "name": "Pointer Team"
   },
   "license": "MIT",
   "main": "./out/main.js",
@@ -262,10 +262,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/vscode.git"
+    "url": "https://github.com/pointer-editor/pointer.git"
   },
   "bugs": {
-    "url": "https://github.com/microsoft/vscode/issues"
+    "url": "https://github.com/pointer-editor/pointer/issues"
   },
   "optionalDependencies": {
     "windows-foreground-love": "0.6.1"

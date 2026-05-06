@@ -7,7 +7,7 @@
 // See protocol.md for the full design rationale.
 //
 // Most types are imported from the auto-generated protocol layer
-// (synced from the agent-host-protocol repo). This file adds VS Code-specific
+// (synced from the agent-host-protocol repo). This file adds Pointer-specific
 // helpers and re-exports.
 
 import { hasKey } from '../../../../base/common/types.js';
@@ -121,7 +121,7 @@ export const enum FileEditKind {
 /** URI for the root state subscription. */
 export const ROOT_STATE_URI = 'agenthost:/root';
 
-// ---- VS Code-specific derived types -----------------------------------------
+// ---- Pointer-specific derived types -----------------------------------------
 
 /**
  * A tool call in a terminal state, stored in completed turns.
@@ -271,7 +271,7 @@ export type ComponentToState = {
 // ---- SessionMeta accessors -------------------------------------------------
 
 /**
- * VS Code-side alias for the protocol's open `_meta` property bag on
+ * Pointer-side alias for the protocol's open `_meta` property bag on
  * {@link SessionState}. Keys SHOULD be namespaced (e.g. `git`, `vscode.foo`)
  * to avoid collisions; values MUST be JSON-serializable.
  */
@@ -280,7 +280,7 @@ export type SessionMeta = Record<string, unknown>;
 /**
  * Reserved key under {@link SessionMeta} for the well-known git-state
  * payload. Value at this key, when present, MUST be shaped like
- * {@link ISessionGitState}. This is a VS Code-specific convention layered
+ * {@link ISessionGitState}. This is a Pointer-specific convention layered
  * on top of the protocol's generic `_meta` bag — the protocol itself does
  * not know about git state.
  */

@@ -68,7 +68,7 @@ export interface ISSHAgentHostConnection extends IDisposable {
 /**
  * Manages SSH connections that bootstrap a remote agent host process.
  *
- * Each connection SSHs into a remote machine, ensures the VS Code CLI
+ * Each connection SSHs into a remote machine, ensures the Pointer CLI
  * is installed, starts `code agent-host`, and creates a WebSocket relay
  * over the SSH channel. Messages are forwarded between the renderer and
  * the remote agent host via IPC through the shared process.
@@ -89,7 +89,7 @@ export interface ISSHRemoteAgentHostService {
 	 * Bootstrap a remote agent host over SSH.
 	 *
 	 * 1. Opens an SSH connection to the remote host
-	 * 2. Downloads and installs the VS Code CLI if needed
+	 * 2. Downloads and installs the Pointer CLI if needed
 	 * 3. Starts `code agent-host`
 	 * 4. Creates a WebSocket relay over the SSH channel
 	 * 5. Registers the connection with {@link IRemoteAgentHostService}

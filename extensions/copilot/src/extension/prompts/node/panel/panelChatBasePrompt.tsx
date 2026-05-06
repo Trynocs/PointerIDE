@@ -58,7 +58,7 @@ export class PanelChatBasePrompt extends PromptElement<PanelChatBasePromptProps>
 						<CodeBlockFormattingRules />
 						For code blocks use four backticks to start and end.<br />
 						Avoid wrapping the whole response in triple backticks.<br />
-						The user works in an IDE called Visual Studio Code which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal.<br />
+						The user works in an IDE called Pointer which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal.<br />
 						The user is working on a {operatingSystem} machine. Please respond with system specific commands if applicable.<br />
 						The active document is the source code the user is looking at right now.<br />
 						You can only give one reply for each conversation turn.<br />

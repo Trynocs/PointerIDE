@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 /**
- * Sanitizes the version of VS Code to remove the minor version bump and -insider suffix
- * @param vsCodeVersion The version of VS Code to sanitize i.e. 1.77.0-insider
- * @returns The sanitized version of VS Code i.e. 1.77
+ * Sanitizes the version of Pointer to remove the minor version bump and -insider suffix
+ * @param vsCodeVersion The version of Pointer to sanitize i.e. 1.77.0-insider
+ * @returns The sanitized version of Pointer i.e. 1.77
  */
 export function sanitizeVSCodeVersion(vsCodeVersion: string): string {
 	const splitVersion = vsCodeVersion.split('.');

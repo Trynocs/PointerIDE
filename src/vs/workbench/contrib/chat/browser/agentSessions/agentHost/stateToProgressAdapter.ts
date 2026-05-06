@@ -360,7 +360,7 @@ export function completedToolCallToEditParts(tc: ICompletedToolCall): IChatProgr
 /**
  * URI schemes that should NOT be rewritten when they appear inside markdown
  * links received from a remote agent host. These are links that are
- * meaningful outside the agent host's workspace (e.g. web links, VS Code
+ * meaningful outside the agent host's workspace (e.g. web links, Pointer
  * commands) or are already wrapped in the agent-host scheme.
  */
 const EXTERNAL_LINK_SCHEMES: ReadonlySet<string> = new Set([

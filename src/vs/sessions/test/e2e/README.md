@@ -198,7 +198,7 @@ scripts/
 
 ## Prerequisites
 
-- VS Code compiled (`out/` at the repo root):
+- Pointer compiled (`out/` at the repo root):
   ```bash
   npm install && npm run compile
   ```

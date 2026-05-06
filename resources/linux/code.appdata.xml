@@ -4,14 +4,14 @@
 	<metadata_license>@@LICENSE@@</metadata_license>
 	<project_license>@@LICENSE@@</project_license>
 	<name>@@NAME_LONG@@</name>
-	<url type="homepage">https://code.visualstudio.com</url>
-	<summary>Visual Studio Code. Code editing. Redefined.</summary>
+	<url type="homepage">https://github.com/pointer-editor/pointer</url>
+	<summary>Pointer. Code editing, sharpened.</summary>
 	<description>
-		<p>Visual Studio Code is a new choice of tool that combines the simplicity of a code editor with what developers need for the core edit-build-debug cycle. See https://code.visualstudio.com/docs/setup/linux for installation instructions and FAQ.</p>
+		<p>Pointer is a focused code editor for the edit-build-debug cycle, rebranded with the Pointer visual identity.</p>
 	</description>
 	<screenshots>
 		<screenshot type="default">
-			<image>https://code.visualstudio.com/home/home-screenshot-linux-lg.png</image>
+			<image>https://github.com/pointer-editor/pointer/raw/main/resources/linux/code.png</image>
 			<caption>Editing TypeScript and searching for extensions</caption>
 		</screenshot>
 	</screenshots>

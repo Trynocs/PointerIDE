@@ -41,7 +41,7 @@ type OpenInAgentsMode = 'siblingApp' | 'newWindow';
 type OpenInAgentsEvent = { mode: OpenInAgentsMode };
 type OpenInAgentsClassification = {
 	owner: 'osortega';
-	comment: 'Tracks when the user opens the Agents application from the VS Code titlebar.';
+	comment: 'Tracks when the user opens the Agents application from the Pointer titlebar.';
 	mode: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'How the Agents app was opened: siblingApp (launched separate Agents app) or newWindow (in-process agents window).' };
 };
 

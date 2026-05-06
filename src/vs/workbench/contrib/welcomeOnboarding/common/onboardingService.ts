@@ -8,6 +8,10 @@ import { createDecorator } from '../../../../platform/instantiation/common/insta
 
 export const IOnboardingService = createDecorator<IOnboardingService>('onboardingService');
 
+export interface IOnboardingShowOptions {
+	readonly requireSignIn?: boolean;
+}
+
 export interface IOnboardingService {
 	readonly _serviceBrand: undefined;
 
@@ -19,5 +23,5 @@ export interface IOnboardingService {
 	/**
 	 * Show the onboarding modal.
 	 */
-	show(): void;
+	show(options?: IOnboardingShowOptions): void;
 }

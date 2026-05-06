@@ -10,7 +10,7 @@ import { MockMcpServer, parseToolResult } from './testHelpers';
 vi.mock('vscode', () => ({
 	version: '1.95.0',
 	env: {
-		appName: 'Visual Studio Code',
+		appName: 'Pointer',
 		appRoot: '/usr/share/code',
 		language: 'en',
 		machineId: 'test-machine-id',
@@ -47,12 +47,12 @@ describe('getVscodeInfo tool', () => {
 		expect(server.hasToolRegistered('get_vscode_info')).toBe(true);
 	});
 
-	it('should return VS Code environment information', async () => {
+	it('should return Pointer environment information', async () => {
 		const handler = server.getToolHandler('get_vscode_info')!;
 		const result = parseToolResult<VscodeInfoResult>(await handler({}));
 
 		expect(result.version).toBe('1.95.0');
-		expect(result.appName).toBe('Visual Studio Code');
+		expect(result.appName).toBe('Pointer');
 		expect(result.appRoot).toBe('/usr/share/code');
 		expect(result.language).toBe('en');
 		expect(result.machineId).toBe('test-machine-id');

@@ -46,7 +46,7 @@ export interface IStorageMainService {
 
 	/**
 	 * Provides access to the application shared storage that is shared
-	 * across VS Code and Agents app.
+	 * across Pointer and Agents app.
 	 */
 	readonly applicationSharedStorage: IStorageMain;
 
@@ -206,12 +206,12 @@ export class StorageMainService extends Disposable implements IStorageMainServic
 
 		// Determine the fallback storage for transparent migration of keys
 		// from APPLICATION to APPLICATION_SHARED scope:
-		// In VS Code: reuse the own application storage (keys are local)
+		// In Pointer: reuse the own application storage (keys are local)
 		let fallbackStorage: IStorageMain = this.applicationStorage;
 		const hostUserRoamingDataHome = this.environmentService.parentAppUserRoamingDataHome;
 		if (hostUserRoamingDataHome) {
-			// - In the Agents App: create a storage backed by the host (VS Code)
-			//   app's application DB so keys are found even if VS Code hasn't
+			// - In the Agents App: create a storage backed by the host (Pointer)
+			//   app's application DB so keys are found even if Pointer hasn't
 			//   migrated them to the shared DB yet.
 			//   We use ProfileStorageMain (not ApplicationStorageMain) to avoid
 			//   writing telemetry state into the host app's DB — this is read-only.

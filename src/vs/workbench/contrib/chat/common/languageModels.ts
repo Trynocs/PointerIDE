@@ -9,19 +9,17 @@ import { CancellationToken } from '../../../../base/common/cancellation.js';
 import { IStringDictionary } from '../../../../base/common/collections.js';
 import { CancellationError, getErrorMessage, isCancellationError } from '../../../../base/common/errors.js';
 import { Emitter, Event } from '../../../../base/common/event.js';
-import { hash } from '../../../../base/common/hash.js';
 import { Iterable } from '../../../../base/common/iterator.js';
 import { IJSONSchema, TypeFromJsonSchema } from '../../../../base/common/jsonSchema.js';
 import { DisposableStore, IDisposable, toDisposable } from '../../../../base/common/lifecycle.js';
 import { IObservable, observableValue } from '../../../../base/common/observable.js';
 import { equals } from '../../../../base/common/objects.js';
 import Severity from '../../../../base/common/severity.js';
-import { format, isFalsyOrWhitespace } from '../../../../base/common/strings.js';
+import { isFalsyOrWhitespace } from '../../../../base/common/strings.js';
 import { ThemeIcon } from '../../../../base/common/themables.js';
 import { IAction, SubmenuAction } from '../../../../base/common/actions.js';
 import { isObject, isString } from '../../../../base/common/types.js';
 import { URI } from '../../../../base/common/uri.js';
-import { generateUuid } from '../../../../base/common/uuid.js';
 import { localize } from '../../../../nls.js';
 import { ContextKeyExpr, IContextKey, IContextKeyService } from '../../../../platform/contextkey/common/contextkey.js';
 import { ExtensionIdentifier } from '../../../../platform/extensions/common/extensions.js';
@@ -287,6 +285,12 @@ export interface ILanguageModelChatProvider {
 	provideTokenCount(modelId: string, message: string | IChatMessage, token: CancellationToken): Promise<number>;
 }
 
+export interface ILanguageModelsProviderConnectionResult {
+	success: boolean;
+	models: { name: string; id: string; tokens?: number }[];
+	error?: string;
+}
+
 export interface ILanguageModelChat {
 	metadata: ILanguageModelChatMetadata;
 	sendChatRequest(messages: IChatMessage[], from: ExtensionIdentifier | undefined, options: ILanguageModelChatRequestOptions, token: CancellationToken): Promise<ILanguageModelChatResponse>;
@@ -407,7 +411,11 @@ export interface ILanguageModelsService {
 
 	addLanguageModelsProviderGroup(name: string, vendorId: string, configuration: IStringDictionary<unknown> | undefined): Promise<void>;
 
+	updateLanguageModelsProviderGroup(existing: ILanguageModelsProviderGroup, name: string, vendorId: string, configuration: IStringDictionary<unknown> | undefined): Promise<void>;
+
 	removeLanguageModelsProviderGroup(vendorId: string, providerGroupName: string): Promise<void>;
+
+	testProviderConnection(vendorId: string, configuration: IStringDictionary<unknown> | undefined): Promise<ILanguageModelsProviderConnectionResult>;
 
 	configureLanguageModelsProviderGroup(vendorId: string, name?: string): Promise<void>;
 
@@ -565,9 +573,6 @@ interface IChatControlResponse {
 }
 
 export class LanguageModelsService implements ILanguageModelsService {
-
-	private static SECRET_KEY_PREFIX = 'chat.lm.secret.';
-	private static SECRET_INPUT = '${input:{0}}';
 
 	readonly _serviceBrand: undefined;
 
@@ -1343,6 +1348,18 @@ export class LanguageModelsService implements ILanguageModelsService {
 		await this._languageModelsConfigurationService.addLanguageModelsProviderGroup(languageModelProviderGroup);
 	}
 
+	async updateLanguageModelsProviderGroup(existing: ILanguageModelsProviderGroup, name: string, vendorId: string, configuration: IStringDictionary<unknown> | undefined): Promise<void> {
+		const vendor = this.getVendors().find(({ vendor }) => vendor === vendorId);
+		if (!vendor) {
+			throw new Error(`Vendor ${vendorId} not found.`);
+		}
+
+		const languageModelProviderGroup = await this._resolveLanguageModelProviderGroup(name, vendorId, configuration, vendor.configuration);
+		await this._deleteSecretsNotReferencedInConfiguration(existing, languageModelProviderGroup, vendor.configuration);
+		await this._languageModelsConfigurationService.updateLanguageModelsProviderGroup(existing, languageModelProviderGroup);
+		await this._resolveAllLanguageModels(vendorId, false);
+	}
+
 	async removeLanguageModelsProviderGroup(vendorId: string, providerGroupName: string): Promise<void> {
 		const vendor = this.getVendors().find(({ vendor }) => vendor === vendorId);
 		if (!vendor) {
@@ -1358,6 +1375,34 @@ export class LanguageModelsService implements ILanguageModelsService {
 
 		await this._deleteSecretsInConfiguration(existing, vendor.configuration);
 		await this._languageModelsConfigurationService.removeLanguageModelsProviderGroup(existing);
+	}
+
+	async testProviderConnection(vendorId: string, configuration: IStringDictionary<unknown> | undefined): Promise<ILanguageModelsProviderConnectionResult> {
+		const vendor = this.getVendors().find(({ vendor }) => vendor === vendorId);
+		if (!vendor) {
+			return { success: false, models: [], error: `Vendor ${vendorId} not found.` };
+		}
+
+		await this._extensionService.activateByEvent(`onLanguageModelChatProvider:${vendorId}`);
+		const provider = this._providers.get(vendorId);
+		if (!provider) {
+			return { success: false, models: [], error: `Provider ${vendorId} is not registered.` };
+		}
+
+		try {
+			const resolvedConfiguration = await this._resolveConfiguration({ name: vendor.displayName, vendor: vendorId, ...(configuration ?? {}) }, vendor.configuration);
+			const models = await provider.provideLanguageModelChatInfo({ silent: false, configuration: resolvedConfiguration }, CancellationToken.None);
+			return {
+				success: true,
+				models: models.map(model => ({
+					id: model.metadata.id,
+					name: model.metadata.name || model.metadata.id,
+					tokens: model.metadata.maxInputTokens + model.metadata.maxOutputTokens
+				}))
+			};
+		} catch (error) {
+			return { success: false, models: [], error: getErrorMessage(error) };
+		}
 	}
 
 	private requireConfiguring(schema: IJSONSchema): boolean {
@@ -1611,15 +1656,29 @@ export class LanguageModelsService implements ILanguageModelsService {
 		}
 	}
 
-	private encodeSecretKey(property: string): string {
-		return format(LanguageModelsService.SECRET_INPUT, property);
+	private isEncodedSecretKey(value: unknown): boolean {
+		return isString(value) && value.startsWith('${input:') && value.endsWith('}');
 	}
 
 	private decodeSecretKey(secretInput: unknown): string | undefined {
 		if (!isString(secretInput)) {
 			return undefined;
 		}
+		if (!this.isEncodedSecretKey(secretInput)) {
+			return undefined;
+		}
 		return secretInput.substring(secretInput.indexOf(':') + 1, secretInput.length - 1);
+	}
+
+	private resolveEnvironmentVariable(value: unknown): unknown {
+		if (!isString(value) || !value.startsWith('${env:') || !value.endsWith('}')) {
+			return value;
+		}
+		const variableName = value.substring('${env:'.length, value.length - 1).trim();
+		if (!variableName) {
+			return undefined;
+		}
+		return typeof process === 'undefined' ? undefined : process.env[variableName];
 	}
 
 	private _clearModelCache(vendor: string): Map<string, ILanguageModelChatMetadata> {
@@ -1654,8 +1713,9 @@ export class LanguageModelsService implements ILanguageModelsService {
 			let value = group[key];
 			if (schema.properties?.[key]?.secret) {
 				const secretKey = this.decodeSecretKey(value);
-				value = secretKey ? await this._secretStorageService.get(secretKey) : undefined;
+				value = secretKey ? await this._secretStorageService.get(secretKey) : (this.isEncodedSecretKey(value) ? undefined : value);
 			}
+			value = this.resolveEnvironmentVariable(value);
 			result[key] = value;
 		}
 
@@ -1669,13 +1729,7 @@ export class LanguageModelsService implements ILanguageModelsService {
 
 		const result: IStringDictionary<unknown> = {};
 		for (const key in configuration) {
-			let value = configuration[key];
-			if (schema.properties?.[key]?.secret && isString(value)) {
-				const secretKey = `${LanguageModelsService.SECRET_KEY_PREFIX}${hash(generateUuid()).toString(16)}`;
-				await this._secretStorageService.set(secretKey, value);
-				value = this.encodeSecretKey(secretKey);
-			}
-			result[key] = value;
+			result[key] = configuration[key];
 		}
 
 		return { name, vendor, ...result };
@@ -1692,6 +1746,31 @@ export class LanguageModelsService implements ILanguageModelsService {
 			if (schema.properties?.[key]?.secret) {
 				const secretKey = this.decodeSecretKey(value);
 				if (secretKey) {
+					await this._secretStorageService.delete(secretKey);
+				}
+			}
+		}
+	}
+
+	private async _deleteSecretsNotReferencedInConfiguration(from: ILanguageModelsProviderGroup, to: ILanguageModelsProviderGroup, schema: IJSONSchema | undefined): Promise<void> {
+		if (!schema) {
+			return;
+		}
+
+		const referencedSecretKeys = new Set<string>();
+		for (const key in to) {
+			if (schema.properties?.[key]?.secret) {
+				const secretKey = this.decodeSecretKey(to[key]);
+				if (secretKey) {
+					referencedSecretKeys.add(secretKey);
+				}
+			}
+		}
+
+		for (const key in from) {
+			if (schema.properties?.[key]?.secret) {
+				const secretKey = this.decodeSecretKey(from[key]);
+				if (secretKey && !referencedSecretKeys.has(secretKey)) {
 					await this._secretStorageService.delete(secretKey);
 				}
 			}

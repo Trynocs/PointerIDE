@@ -96,13 +96,13 @@ export interface OTelConfigInput {
  * Resolve OTel configuration with layered precedence:
  * 1. COPILOT_OTEL_* env vars (highest)
  * 2. OTEL_EXPORTER_OTLP_* standard env vars
- * 3. VS Code settings
+ * 3. Pointer settings
  * 4. Defaults (lowest)
  */
 export function resolveOTelConfig(input: OTelConfigInput): OTelConfig {
 	const { env } = input;
 
-	// Kill switch: respect VS Code telemetry level
+	// Kill switch: respect Pointer telemetry level
 	if (input.vscodeTelemetryLevel === 'off') {
 		return createDisabledConfig(input);
 	}

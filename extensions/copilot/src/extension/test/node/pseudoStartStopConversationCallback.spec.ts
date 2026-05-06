@@ -161,11 +161,11 @@ suite('Post Report Conversation Callback', () => {
 			postReportFn);
 
 
-		responseSource.emitOne({ delta: { text: `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Visual Studio Code. I'm not equipped to provide a definition of a computer. [RESPONSE END]` } });
+		responseSource.emitOne({ delta: { text: `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Pointer. I'm not equipped to provide a definition of a computer. [RESPONSE END]` } });
 		responseSource.resolve();
 
 		await testObj.doProcessResponse(responseSource.asyncIterable, stream, CancellationToken.None);
-		assert.strictEqual((stream.items[0] as ChatResponseMarkdownPart).value.value, `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Visual Studio Code. I'm not equipped to provide a definition of a computer. [RESPONSE END]`);
+		assert.strictEqual((stream.items[0] as ChatResponseMarkdownPart).value.value, `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Pointer. I'm not equipped to provide a definition of a computer. [RESPONSE END]`);
 	});
 
 	afterEach(() => sinon.restore());

@@ -1,10 +1,9 @@
 name: @@NAME@@
 version: '@@VERSION@@'
-summary: Code editing. Redefined.
+summary: Pointer. Code editing, sharpened.
 description: |
-  Visual Studio Code is a new choice of tool that combines the
-  simplicity of a code editor with what developers need for the core
-  edit-build-debug cycle.
+  Pointer is a focused code editor for the edit-build-debug cycle,
+  rebranded with the Pointer visual identity.
 
 architectures:
   - build-on: amd64

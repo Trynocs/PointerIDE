@@ -25,7 +25,7 @@ import { ISessionsProvidersService } from '../../../services/sessions/browser/se
 import { resolveRemoteAuthority } from './openInVSCodeUtils.js';
 
 /**
- * Opens the host VS Code app from the Agents window via protocol handler.
+ * Opens Pointer from the Agents window via protocol handler.
  * On desktop this action is replaced by the electron-browser override that
  * uses {@link INativeHostService.launchSiblingApp} instead.
  */
@@ -35,7 +35,7 @@ registerAction2(class OpenSessionWorktreeInVSCodeAction extends Action2 {
 	constructor() {
 		super({
 			id: OpenSessionWorktreeInVSCodeAction.ID,
-			title: localize2('openInVSCode', 'Open in VS Code'),
+			title: localize2('openInVSCode', 'Open in Pointer'),
 			icon: Codicon.vscodeInsiders,
 			precondition: ContextKeyExpr.and(IsAuxiliaryWindowContext.toNegated(), SessionsWelcomeVisibleContext.toNegated()),
 			menu: [{
@@ -57,13 +57,7 @@ registerAction2(class OpenSessionWorktreeInVSCodeAction extends Action2 {
 		const sessionsProvidersService = accessor.get(ISessionsProvidersService);
 		const remoteAgentHostService = accessor.get(IRemoteAgentHostService);
 
-		const scheme = productService.quality === 'stable'
-			? 'vscode'
-			: productService.quality === 'exploration'
-				? 'vscode-exploration'
-				: productService.quality === 'insider'
-					? 'vscode-insiders'
-					: productService.urlProtocol;
+		const scheme = productService.urlProtocol;
 
 		const params = new URLSearchParams();
 		params.set('windowId', '_blank');

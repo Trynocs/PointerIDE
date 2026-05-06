@@ -55,8 +55,8 @@ export class XAIBYOKLMProvider extends AbstractOpenAICompatibleLMProvider {
 		);
 	}
 
-	protected getModelsBaseUrl(): string | undefined {
-		return 'https://api.x.ai/v1';
+	protected getModelsBaseUrl(configuration: { baseUrl?: string; url?: string } | undefined): string | undefined {
+		return configuration?.baseUrl ?? configuration?.url ?? 'https://api.x.ai/v1';
 	}
 
 	protected override getModelsDiscoveryUrl(modelsBaseUrl: string): string {

@@ -29,9 +29,9 @@ import { isLinux } from '../../../../base/common/platform.js';
 import { IEnvironmentService } from '../../../../platform/environment/common/environment.js';
 
 /**
- * Desktop version of the "Open in VS Code" action.
+ * Desktop version of the "Open in Pointer" action.
  *
- * In built builds with a sibling app configured, launches the host VS Code app
+ * In built builds with a sibling app configured, launches Pointer
  * via {@link INativeHostService.launchSiblingApp} (child_process.spawn) with
  * direct CLI arguments, bypassing protocol handlers and their OS security
  * prompts. In dev builds (no sibling app), falls back to the protocol handler
@@ -43,7 +43,7 @@ registerAction2(class OpenSessionWorktreeInVSCodeAction extends Action2 {
 	constructor() {
 		super({
 			id: OpenSessionWorktreeInVSCodeAction.ID,
-			title: localize2('openInVSCode', 'Open in VS Code'),
+			title: localize2('openInVSCode', 'Open in Pointer'),
 			icon: Codicon.vscodeInsiders,
 			precondition: ContextKeyExpr.and(IsAuxiliaryWindowContext.toNegated(), SessionsWelcomeVisibleContext.toNegated()),
 			menu: [{
@@ -115,13 +115,7 @@ registerAction2(class OpenSessionWorktreeInVSCodeAction extends Action2 {
 	): Promise<void> {
 		const openerService = accessor.get(IOpenerService);
 
-		const scheme = productService.quality === 'stable'
-			? 'vscode'
-			: productService.quality === 'exploration'
-				? 'vscode-exploration'
-				: productService.quality === 'insider'
-					? 'vscode-insiders'
-					: productService.urlProtocol;
+		const scheme = productService.urlProtocol;
 
 		const params = new URLSearchParams();
 		params.set('windowId', '_blank');

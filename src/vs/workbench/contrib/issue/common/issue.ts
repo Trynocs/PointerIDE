@@ -24,7 +24,7 @@ export const enum IssueType {
 }
 
 export enum IssueSource {
-	VSCode = 'vscode',
+	Pointer = 'pointer',
 	Extension = 'extension',
 	Marketplace = 'marketplace'
 }

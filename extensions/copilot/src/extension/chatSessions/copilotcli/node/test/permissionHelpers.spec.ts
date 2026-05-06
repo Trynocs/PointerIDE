@@ -326,7 +326,7 @@ describe('CopilotCLI permissionHelpers', () => {
 			expect(result.kind).toBe('approve-once');
 		});
 
-		it('auto-approves files in a VS Code workspace folder', async () => {
+		it('auto-approves files in a Pointer workspace folder', async () => {
 			const req = { kind: 'read', path: '/vscode-ws/src/file.ts' } as any;
 			const result = await handleReadPermission(
 				'session-1', req, undefined, [], makeImageSupport(false),

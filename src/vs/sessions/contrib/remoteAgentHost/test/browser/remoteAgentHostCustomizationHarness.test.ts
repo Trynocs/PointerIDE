@@ -273,7 +273,7 @@ suite('RemoteAgentHostCustomizationHarness', () => {
 		));
 
 		const bundleUri = `${SYNCED_CUSTOMIZATION_SCHEME}:///test-authority`;
-		const bundleRef: CustomizationRef = { uri: bundleUri, displayName: 'VS Code Synced Data', nonce: 'abc' };
+		const bundleRef: CustomizationRef = { uri: bundleUri, displayName: 'Pointer Synced Data', nonce: 'abc' };
 		const synced: SessionCustomization = {
 			customization: bundleRef,
 			clientId: 'test-client',
@@ -350,7 +350,7 @@ suite('RemoteAgentHostCustomizationHarness', () => {
 
 		const items = await provider.provideChatSessionCustomizations(CancellationToken.None);
 		// The synthetic bundle itself should NOT appear as a top-level item
-		assert.ok(!items.some(i => i.name === 'VS Code Synced Data'), 'synthetic bundle should be hidden');
+		assert.ok(!items.some(i => i.name === 'Pointer Synced Data'), 'synthetic bundle should be hidden');
 		// But its expanded child should appear
 		const skillItem = items.find(i => i.name === 'my-skill');
 		assert.ok(skillItem, 'expanded skill from bundle should be present');
@@ -369,7 +369,7 @@ suite('RemoteAgentHostCustomizationHarness', () => {
 		));
 
 		const bundleUri = `${SYNCED_CUSTOMIZATION_SCHEME}:///test-authority`;
-		const bundleRef: CustomizationRef = { uri: bundleUri, displayName: 'VS Code Synced Data', nonce: 'abc' };
+		const bundleRef: CustomizationRef = { uri: bundleUri, displayName: 'Pointer Synced Data', nonce: 'abc' };
 		const synced: SessionCustomization = {
 			customization: bundleRef,
 			clientId: 'test-client',

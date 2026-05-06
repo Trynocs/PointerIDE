@@ -40,7 +40,7 @@ Two registrations can target the same slot with opposite `when` clauses, pointin
 | Files view (AuxiliaryBar) | ❌ Gated | `when: !sessionsIsPhoneLayout` on view descriptor |
 | Logs view (Panel) | ❌ Gated | `when: !sessionsIsPhoneLayout` on view descriptor |
 | Terminal actions | ❌ Gated | `when: !sessionsIsPhoneLayout` on menu item |
-| "Open in VS Code" action | ❌ Gated | `when: !sessionsIsPhoneLayout` on menu item |
+| "Open in Pointer" action | ❌ Gated | `when: !sessionsIsPhoneLayout` on menu item |
 | Code review toolbar | ❌ Gated | `when: !sessionsIsPhoneLayout` on menu item |
 | Customizations toolbar | ❌ Hidden | CSS `display: none` on phone |
 | Titlebar | ❌ Hidden | Grid `visible: false` + CSS + MobileTitlebarPart replacement |

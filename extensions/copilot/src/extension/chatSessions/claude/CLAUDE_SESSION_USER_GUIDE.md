@@ -1,8 +1,8 @@
 # Claude Session Target — User Guide
 
-This guide covers the **Claude** session target in VS Code Copilot Chat: what it is, how to use it, and every feature available to you.
+This guide covers the **Claude** session target in Pointer Copilot Chat: what it is, how to use it, and every feature available to you.
 
-> **Quick summary:** The Claude session target lets you delegate agentic coding tasks to Anthropic's Claude Agent SDK running locally on your machine — directly inside VS Code's chat UI. It can read your code, run shell commands, edit files, search the web, and iterate autonomously until a task is complete.
+> **Quick summary:** The Claude session target lets you delegate agentic coding tasks to Anthropic's Claude Agent SDK running locally on your machine — directly inside Pointer's chat UI. It can read your code, run shell commands, edit files, search the web, and iterate autonomously until a task is complete.
 
 ---
 
@@ -54,17 +54,17 @@ This guide covers the **Claude** session target in VS Code Copilot Chat: what it
 
 ### Prerequisites
 
-- **VS Code Insiders** (the extension uses proposed APIs not available in Stable)
+- **Pointer Insiders** (the extension uses proposed APIs not available in Stable)
 - **GitHub Copilot subscription** — Claude sessions are powered by your existing Copilot plan; no separate Anthropic API key is required
-- **Signed into GitHub** — you must be authenticated in VS Code. If you see "Not Logged In" in the status bar, sign in via the Accounts button in the sidebar before using Claude
+- **Signed into GitHub** — you must be authenticated in Pointer. If you see "Not Logged In" in the status bar, sign in via the Accounts button in the sidebar before using Claude
 
 ### Enabling Claude Sessions
 
 Claude sessions are **enabled by default**. If you don't see Claude in the session target picker, verify the setting is on:
 
-1. Open VS Code Settings (`Cmd+,` / `Ctrl+,`)
+1. Open Pointer Settings (`Cmd+,` / `Ctrl+,`)
 2. Search for `claudeAgent.enabled`
-3. Ensure **"Enable Claude Agent sessions in VS Code"** is checked
+3. Ensure **"Enable Claude Agent sessions in Pointer"** is checked
 
 To disable Claude sessions, set this in your `settings.json`:
 
@@ -202,7 +202,7 @@ After approval, Claude switches to "Edit automatically" mode and executes the pl
 
 ### Sessions View
 
-Claude sessions are persisted to disk and can be resumed across VS Code restarts. The **Sessions view** is your central hub for browsing, searching, and resuming past sessions.
+Claude sessions are persisted to disk and can be resumed across Pointer restarts. The **Sessions view** is your central hub for browsing, searching, and resuming past sessions.
 
 #### Opening the Sessions View
 
@@ -269,7 +269,7 @@ Right-click any session in the list to access these actions:
 |--------|----------|-------------|
 | **Open as Editor** | `Ctrl+Enter` | Open the session in the main chat editor area |
 | **Open to the Side** | `Ctrl+Alt+Enter` | Open the session in a split view alongside the current editor |
-| **Open in New Window** | — | Open the session in a new VS Code window |
+| **Open in New Window** | — | Open the session in a new Pointer window |
 | **Mark as Unread** | — | Mark the session with the blue unread indicator |
 | **Mark All as Read** | — | Clear the unread indicator from all sessions |
 | **Archive** | `Cmd+Backspace` | Archive the session (hides it from the default view; use the "Archived" filter to see archived sessions) |
@@ -286,7 +286,7 @@ Click any session in the list to open it. When you open a past session:
 3. The **chat input** is ready for new messages — type a follow-up and Claude picks up where it left off with full context
 4. The session is highlighted in the Sessions sidebar
 
-Session files are stored on disk at `~/.claude/projects/<workspace-slug>/` as JSONL files, so they persist across VS Code restarts and even across machines if the files are synced.
+Session files are stored on disk at `~/.claude/projects/<workspace-slug>/` as JSONL files, so they persist across Pointer restarts and even across machines if the files are synced.
 
 ---
 
@@ -394,7 +394,7 @@ Launches an interactive wizard to configure hooks — custom scripts that run in
 **Save locations for hooks:**
 - **Workspace local** — `.vscode/settings.json` (not version controlled)
 - **Workspace** — `.vscode/settings.json` (version controlled)
-- **User settings** — VS Code user settings
+- **User settings** — Pointer user settings
 
 **Example:** Block all Bash commands that use `rm -rf`:
 
@@ -464,7 +464,7 @@ Compresses the conversation history to save context tokens. Useful for long sess
 
 **Usage:** Type `/compact` in the chat input
 
-> **Note:** An additional `/terminal` command exists in the codebase but is currently disabled pending review. When enabled, it will create a VS Code terminal with the Claude CLI configured to use your Copilot subscription.
+> **Note:** An additional `/terminal` command exists in the codebase but is currently disabled pending review. When enabled, it will create a Pointer terminal with the Claude CLI configured to use your Copilot subscription.
 
 ---
 
@@ -521,7 +521,7 @@ Claude also has access to IDE-provided tools via MCP (Model Context Protocol):
 
 | Tool | Description |
 |------|-------------|
-| **getDiagnostics** | Get language diagnostics (errors, warnings) from VS Code's language servers |
+| **getDiagnostics** | Get language diagnostics (errors, warnings) from Pointer's language servers |
 
 This means Claude can see your TypeScript errors, ESLint warnings, and other language server diagnostics — and fix them autonomously.
 
@@ -645,7 +645,7 @@ Instructions for Claude when this skill is invoked...
 
 ## Hooks
 
-Hooks let you run custom scripts at key moments in Claude's execution. They're configured via the [`/hooks`](#hooks--configure-lifecycle-hooks) slash command and stored in VS Code settings.
+Hooks let you run custom scripts at key moments in Claude's execution. They're configured via the [`/hooks`](#hooks--configure-lifecycle-hooks) slash command and stored in Pointer settings.
 
 ### Common Hook Use Cases
 
@@ -670,18 +670,18 @@ Hooks let you run custom scripts at key moments in Claude's execution. They're c
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| `github.copilot.chat.claudeAgent.enabled` | boolean | `true` | Enable Claude Agent sessions in VS Code |
+| `github.copilot.chat.claudeAgent.enabled` | boolean | `true` | Enable Claude Agent sessions in Pointer |
 | `github.copilot.chat.claudeAgent.allowDangerouslySkipPermissions` | boolean | `false` | Show "Bypass all permissions" option. ⚠️ Sandboxes only |
 
 ---
 
 ## How It Differs from Other Session Targets
 
-VS Code Copilot Chat offers four session targets. Here's how Claude compares:
+Pointer Copilot Chat offers four session targets. Here's how Claude compares:
 
 | Feature | Claude | Local (Copilot) | Copilot CLI | Cloud |
 |---------|--------|-----------------|-------------|-------|
-| **Where it runs** | Locally via Agent SDK | Locally via VS Code | Locally in a separate Git worktree (isolated from your working copy) | Cloud (GitHub) |
+| **Where it runs** | Locally via Agent SDK | Locally via Pointer | Locally in a separate Git worktree (isolated from your working copy) | Cloud (GitHub) |
 | **Agentic loop** | ✅ Autonomous iteration | ✅ Agent mode | ✅ Background | ✅ Async |
 | **Shell commands** | ✅ Direct Bash execution | Via tools framework | ✅ CLI tools | Cloud sandbox |
 | **Plan mode** | ✅ Plan → review → execute | Not available | Not available | Not available |
@@ -716,4 +716,4 @@ VS Code Copilot Chat offers four session targets. Here's how Claude compares:
 
 9. **Queue multiple requests** — you can type follow-up messages while Claude is still working. They are processed in order.
 
-10. **Resume sessions** — don't worry about closing VS Code. Your Claude sessions persist and can be browsed in the [Sessions view](#sessions-view). Rename important sessions so you can find them later.
+10. **Resume sessions** — don't worry about closing Pointer. Your Claude sessions persist and can be browsed in the [Sessions view](#sessions-view). Rename important sessions so you can find them later.

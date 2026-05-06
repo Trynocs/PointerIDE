@@ -54,7 +54,7 @@ export class PanelChatFixPrompt extends PromptElement<PanelChatFixPromptProps> {
 						Minimize any other prose.<br />
 						Use Markdown formatting in your answers.<br />
 						<CodeBlockFormattingRules />
-						The user works in an IDE called Visual Studio Code which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal.<br />
+						The user works in an IDE called Pointer which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal.<br />
 						The active document is the source code the user is looking at right now.<br />
 						You can only give one reply for each conversation turn.<br />
 						<br />

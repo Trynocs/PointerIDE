@@ -542,7 +542,7 @@ interface ISharedStorageChangedMessage extends ICrossAppIPCMessage {
 
 /**
  * A SQLite storage database wrapper that detects external changes
- * via CrossAppIPC. When the sibling app (VS Code or Sessions app)
+ * via CrossAppIPC. When the sibling app (Pointer or Sessions app)
  * writes to the shared storage, it sends an IPC message with the
  * changed keys for instant notification.
  */

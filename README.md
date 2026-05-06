@@ -1,78 +1,168 @@
-# Visual Studio Code - Open Source ("Code - OSS")
-[![Feature Requests](https://img.shields.io/github/issues/microsoft/vscode/feature-request.svg)](https://github.com/microsoft/vscode/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
-[![Bugs](https://img.shields.io/github/issues/microsoft/vscode/bug.svg)](https://github.com/microsoft/vscode/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
-[![Gitter](https://img.shields.io/badge/chat-on%20gitter-yellow.svg)](https://gitter.im/Microsoft/vscode)
-
-## The Repository
-
-This repository ("`Code - OSS`") is where we (Microsoft) develop the [Visual Studio Code](https://code.visualstudio.com) product together with the community. Not only do we work on code and issues here, but we also publish our [roadmap](https://github.com/microsoft/vscode/wiki/Roadmap), [monthly iteration plans](https://github.com/microsoft/vscode/wiki/Iteration-Plans), and our [endgame plans](https://github.com/microsoft/vscode/wiki/Running-the-Endgame). This source code is available to everyone under the standard [MIT license](https://github.com/microsoft/vscode/blob/main/LICENSE.txt).
-
-## Visual Studio Code
-
 <p align="center">
-  <img alt="VS Code in action" src="https://user-images.githubusercontent.com/35271042/118224532-3842c400-b438-11eb-923d-a5f66fa6785a.png">
+  <img src="src/img/banner.png" alt="Pointer banner" width="100%" />
 </p>
 
-[Visual Studio Code](https://code.visualstudio.com) is a distribution of the `Code - OSS` repository with Microsoft-specific customizations released under a traditional [Microsoft product license](https://code.visualstudio.com/License/).
+<p align="center">
+  <a href="https://github.com/PointerIDE/Pointer/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/PointerIDE/Pointer?style=for-the-badge&logo=github&color=111111"></a>
+  <a href="https://github.com/PointerIDE/Pointer/network/members"><img alt="GitHub forks" src="https://img.shields.io/github/forks/PointerIDE/Pointer?style=for-the-badge&logo=github&color=111111"></a>
+  <a href="https://github.com/PointerIDE/Pointer/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/PointerIDE/Pointer?style=for-the-badge&logo=github&color=111111"></a>
+  <a href="https://github.com/PointerIDE/Pointer/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/PointerIDE/Pointer?style=for-the-badge&logo=git&color=111111"></a>
+  <a href="LICENSE.txt"><img alt="MIT license" src="https://img.shields.io/github/license/PointerIDE/Pointer?style=for-the-badge&color=111111"></a>
+</p>
 
-[Visual Studio Code](https://code.visualstudio.com) combines the simplicity of a code editor with what developers need for their core edit-build-debug cycle. It provides comprehensive code editing, navigation, and understanding support along with lightweight debugging, a rich extensibility model, and lightweight integration with existing tools.
+<p align="center">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-Editor_Core-3178C6?style=flat-square&logo=typescript&logoColor=white">
+  <img alt="Electron" src="https://img.shields.io/badge/Electron-39.8.8-47848F?style=flat-square&logo=electron&logoColor=white">
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-22.22.1-5FA04E?style=flat-square&logo=node.js&logoColor=white">
+  <img alt="Windows" src="https://img.shields.io/badge/Windows-Release_Build-0078D4?style=flat-square&logo=windows&logoColor=white">
+  <img alt="Pointer" src="https://img.shields.io/badge/Product-Pointer-111111?style=flat-square">
+</p>
 
-Visual Studio Code is updated monthly with new features and bug fixes. You can download it for Windows, macOS, and Linux on [Visual Studio Code's website](https://code.visualstudio.com/Download). To get the latest releases every day, install the [Insiders build](https://code.visualstudio.com/insiders).
+<h1 align="center">Pointer</h1>
+
+<p align="center">
+  A standalone desktop code editor with Pointer branding, Pointer app IDs, Pointer data folders, and Pointer release artifacts.
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a>
+  ·
+  <a href="#features">Features</a>
+  ·
+  <a href="#tech-stack">Tech Stack</a>
+  ·
+  <a href="#builds">Builds</a>
+  ·
+  <a href="#documentation">Docs</a>
+</p>
+
+---
+
+## What Is Pointer?
+
+Pointer is an independent editor distribution built from the Pointer-Core codebase. It keeps the familiar layered editor architecture, Monaco editor foundation, extension model, terminal stack, and desktop integration, while shipping as its own product.
+
+Pointer is **not** an official Microsoft product, is **not** Microsoft-signed, and does **not** use the official Microsoft Marketplace. Product identity lives in [product.json](product.json), including the app name, data folders, URL protocol, Windows IDs, server name, tunnel name, themes, and built-in extensions.
+
+## Quick Start
+
+| Goal | Command | What it does |
+|---|---|---|
+| Start existing dev output | `run\start.bat` | Launches the app only. No watcher, install, rebuild, or compile. |
+| Start live dev mode | `run\start-dev.bat` | Ensures dependencies, starts the watcher, and launches Pointer. |
+| Stop dev processes | `run\dev-stop.bat` | Stops Pointer dev watchers and app processes for this repo. |
+| Build portable release | `run\build-pointer.bat` | Creates a packaged app under `.build\artifacts\`. |
+| Build ZIP + installer | `run\build-pointer.bat --Zip --Installer` | Creates portable, ZIP, and Inno Setup installer artifacts. |
+
+## Features
+
+| Area | Included |
+|---|---|
+| Editor core | Monaco-based editing, syntax highlighting, navigation, search, command system |
+| Desktop app | Electron shell, native menus, app icon, Windows packaging, Pointer URI protocol |
+| Terminal | Integrated terminal powered by xterm.js and native pty integration |
+| Extensions | Built-in language, Git, Markdown, theme, notebook, media, and developer tooling extensions |
+| Agent workflows | Agent sessions and chat/session infrastructure under `src/vs/sessions/` and workbench chat areas |
+| Themes | Pointer onboarding themes configured in `product.json` and theme defaults |
+| Release pipeline | Local Node runtime, native rebuilds, Electron download, Gulp packaging, ASAR, rcedit, Inno Setup |
+
+## Product Identity
+
+| Field | Value |
+|---|---|
+| Display name | `Pointer` |
+| Application name | `pointer` |
+| User data folder | `.pointer` |
+| Shared data folder | `.pointer-shared` |
+| URL protocol | `pointer://` |
+| Windows AppUserModelId | `Pointer.Pointer` |
+| Server app | `pointer-server` |
+| Tunnel app | `pointer-tunnel` |
+
+## Tech Stack
+
+| Layer | Stack |
+|---|---|
+| Language | TypeScript, JavaScript, Rust CLI pieces, PowerShell/Bat scripts |
+| Runtime | Node.js `22.22.1`, Electron `39.8.8` |
+| UI/editor | Pointer workbench, Monaco editor, xterm.js, Codicons |
+| Build system | npm, Gulp 4, esbuild transpile path, ASAR packaging |
+| Native build | node-gyp, MSVC, Visual Studio 2022 C++ Desktop Workload |
+| Installer | Inno Setup, Windows resources, rcedit |
+| Testing | Mocha, Playwright, smoke tests, integration tests, layer checks |
+
+## Repository Map
+
+| Path | Purpose |
+|---|---|
+| `src/vs/base/` | Foundation utilities and cross-platform primitives |
+| `src/vs/platform/` | Services, dependency injection, storage, files, telemetry, platform APIs |
+| `src/vs/editor/` | Monaco editor core |
+| `src/vs/workbench/` | Main app shell, views, commands, services, extension API |
+| `src/vs/code/` | Electron desktop startup and main process |
+| `src/vs/server/` | Server and remote entry points |
+| `src/vs/sessions/` | Agent sessions window and agentic workflows |
+| `extensions/` | Built-in extensions and themes |
+| `build/` | Gulp tasks, package logic, Electron download, CI helpers |
+| `scripts/` | Lower-level PowerShell, Bat, Node, and shell helpers |
+| `run/` | Human-friendly Windows entrypoints |
+| `docs/` | Pointer project, stack, and release documentation |
+
+## Builds
+
+Release output is written to `.build\artifacts\`.
+
+| Artifact | Description |
+|---|---|
+| `.build\artifacts\Pointer-win32-x64\` | Portable app folder |
+| `.build\artifacts\Pointer-win32-x64.zip` | Optional portable ZIP |
+| `.build\artifacts\PointerSetup-x64-<version>.exe` | Optional Windows installer |
+
+Build logs are stored under `.codex-tools\logs\`. The latest run is referenced by `.codex-tools\logs\latest-run.txt`.
+
+## Brand Assets
+
+<p align="center">
+  <img src="pntr-icon.svg" alt="Pointer icon" width="96" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="pntr-icon-w.svg" alt="Pointer icon white" width="96" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="src/img/pntr-logo.png" alt="Pointer logo" width="120" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="src/img/logo-pntr.png" alt="Pointer mark" width="120" />
+</p>
+
+<p align="center">
+  <img src="src/img/bg-pntr.png" alt="Pointer dark visual" width="32%" />
+  <img src="src/img/w-pntr.png" alt="Pointer white visual" width="32%" />
+  <img src="src/img/b-pntr.png" alt="Pointer black visual" width="32%" />
+</p>
+
+## Documentation
+
+- [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) - complete human and coding-AI project guide
+- [docs/TECH_STACK.md](docs/TECH_STACK.md) - short technical stack and ownership map
+- [docs/RELEASE.md](docs/RELEASE.md) - release build, artifacts, logs, and troubleshooting
+- [AGENTS.md](AGENTS.md) - root instructions for coding agents
+- [.github/copilot-instructions.md](.github/copilot-instructions.md) - Copilot-style coding agent rules
+- [CONTRIBUTING.md](CONTRIBUTING.md) - contribution workflow and review checklist
+
+## Validation Cheatsheet
+
+| Change area | First check |
+|---|---|
+| `src/` TypeScript | `npm run compile-check-ts-native` |
+| `extensions/` TypeScript | `npm run gulp compile-extensions` |
+| `build/` TypeScript | `cd build && npm run typecheck` |
+| Architecture/layers | `npm run valid-layers-check` |
+| Unit tests | `scripts\test.bat --grep <pattern>` |
 
 ## Contributing
 
-There are many ways in which you can participate in this project, for example:
+Contributions should keep the Pointer product identity intact, follow the existing layered architecture, keep changes scoped, and validate TypeScript changes before test runs.
 
-* [Submit bugs and feature requests](https://github.com/microsoft/vscode/issues), and help us verify as they are checked in
-* Review [source code changes](https://github.com/microsoft/vscode/pulls)
-* Review the [documentation](https://github.com/microsoft/vscode-docs) and make pull requests for anything from typos to and new content.
-
-If you are interested in fixing issues and contributing directly to the code base,
-please see the document [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute), which covers the following:
-
-* [How to build and run from source](https://github.com/microsoft/vscode/wiki/How-to-Contribute)
-* [The development workflow, including debugging and running tests](https://github.com/microsoft/vscode/wiki/How-to-Contribute#debugging)
-* [Coding guidelines](https://github.com/microsoft/vscode/wiki/Coding-Guidelines)
-* [Submitting pull requests](https://github.com/microsoft/vscode/wiki/How-to-Contribute#pull-requests)
-* [Finding an issue to work on](https://github.com/microsoft/vscode/wiki/How-to-Contribute#where-to-contribute)
-* [Contributing to translations](https://aka.ms/vscodeloc)
-
-## Feedback
-
-* Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/vscode)
-* [Request a new feature](CONTRIBUTING.md)
-* Upvote [popular feature requests](https://github.com/microsoft/vscode/issues?q=is%3Aopen+is%3Aissue+label%3Afeature-request+sort%3Areactions-%2B1-desc)
-* [File an issue](https://github.com/microsoft/vscode/issues)
-* Connect with the extension author community on [GitHub Discussions](https://github.com/microsoft/vscode-discussions/discussions) or [Slack](https://aka.ms/vscode-dev-community)
-* Follow [@code](https://x.com/code) and let us know what you think!
-
-See our [wiki](https://github.com/microsoft/vscode/wiki/Feedback-Channels) for a description of each of these channels and information on some other available community-driven channels.
-
-## Related Projects
-
-Many of the core components and extensions to VS Code live in their own repositories on GitHub. For example, the [node debug adapter](https://github.com/microsoft/vscode-node-debug) and the [mono debug adapter](https://github.com/microsoft/vscode-mono-debug) repositories are separate from each other. For a complete list, please visit the [Related Projects](https://github.com/microsoft/vscode/wiki/Related-Projects) page on our [wiki](https://github.com/microsoft/vscode/wiki).
-
-## Bundled Extensions
-
-VS Code includes a set of built-in extensions located in the [extensions](extensions) folder, including grammars and snippets for many languages. Extensions that provide rich language support (inline suggestions, Go to Definition) for a language have the suffix `language-features`. For example, the `json` extension provides coloring for `JSON` and the `json-language-features` extension provides rich language support for `JSON`.
-
-## Development Container
-
-This repository includes a Visual Studio Code Dev Containers / GitHub Codespaces development container.
-
-* For [Dev Containers](https://aka.ms/vscode-remote/download/containers), use the **Dev Containers: Clone Repository in Container Volume...** command which creates a Docker volume for better disk I/O on macOS and Windows.
-  * If you already have VS Code and Docker installed, you can also click [here](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/microsoft/vscode) to get started. This will cause VS Code to automatically install the Dev Containers extension if needed, clone the source code into a container volume, and spin up a dev container for use.
-
-* For Codespaces, install the [GitHub Codespaces](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces) extension in VS Code, and use the **Codespaces: Create New Codespace** command.
-
-Docker / the Codespace should have at least **4 cores and 6 GB of RAM (8 GB recommended)** to run a full build. See the [development container README](.devcontainer/README.md) for more information.
-
-## Code of Conduct
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+Start with [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md).
 
 ## License
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Licensed under the [MIT](LICENSE.txt) license.
+Pointer retains the original [MIT license](LICENSE.txt) for upstream-derived code and ships as an independently branded product.

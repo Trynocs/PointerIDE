@@ -6,7 +6,7 @@ This document is the **authoritative specification** for the Agent Sessions work
 
 ## 1. Overview
 
-The Agent Sessions Workbench (`Workbench` in `sessions/browser/workbench.ts`) provides a simplified, fixed layout optimized for agent session workflows. Unlike the default VS Code workbench, this layout:
+The Agent Sessions Workbench (`Workbench` in `sessions/browser/workbench.ts`) provides a simplified, fixed layout optimized for agent session workflows. Unlike the default Pointer workbench, this layout:
 
 - Does **not** support settings-based customization
 - Has **fixed** part positions
@@ -108,7 +108,7 @@ The Agent Sessions titlebar includes a custom left toolbar that appears after th
 | Toggle Sidebar | `workbench.action.agentToggleSidebarVisibility` | Left toolbar (`TitleBarLeft`) | Toggles primary sidebar visibility |
 | Agent Host Filter | `sessions.agentHostFilter.pick` | Left toolbar (`TitleBarLeft`) | Dropdown indicator of the host the workbench is scoped to; lets the user switch hosts when more than one is known. When no hosts are known the pill becomes a re-discover trigger (refresh icon; click calls `IAgentHostFilterService.rediscover()`). Renders via a custom `HostFilterActionViewItem`. |
 | Run Script | `workbench.action.agentSessions.runScript` | Right toolbar (`TitleBarRight`) | Split button: runs configured script or shows configure dialog |
-| Open... | (submenu) | Right toolbar (`TitleBarRight`) | Split button submenu: Open Terminal, Open in VS Code |
+| Open... | (submenu) | Right toolbar (`TitleBarRight`) | Split button submenu: Open Terminal, Open in Pointer |
 | Toggle Secondary Sidebar | `workbench.action.agentToggleSecondarySidebarVisibility` | Right toolbar (`TitleBarRight`) | Toggles auxiliary bar visibility |
 
 The toggle sidebar action:
@@ -125,9 +125,9 @@ The Run Script action:
 
 The Open... action:
 - Contributed on `Menus.TitleBarSessionMenu` and laid out on `Menus.TitleBarRightLayout`
-- Contains "Open Terminal" (opens terminal at session worktree) and "Open in VS Code" (opens worktree in new VS Code window)
-- The "Open in VS Code" titlebar widget mirrors the core "Open in Agents" affordance: the product icon is greyscale at rest, returns to full color on hover/focus while respecting reduced-motion preferences, uses secondary-button hover chrome, and draws a separator before the adjacent Run split button
-- "Open in VS Code" is contributed in `contrib/chat/browser/openInVSCode.contribution.ts`, and its custom titlebar widget is registered in `contrib/chat/browser/openInVSCodeWidget.ts` (imported from `contrib/chat/browser/chat.contribution.ts`)
+- Contains "Open Terminal" (opens terminal at session worktree) and "Open in Pointer" (opens worktree in new Pointer window)
+- The "Open in Pointer" titlebar widget mirrors the core "Open in Agents" affordance: the product icon is greyscale at rest, returns to full color on hover/focus while respecting reduced-motion preferences, uses secondary-button hover chrome, and draws a separator before the adjacent Run split button
+- "Open in Pointer" is contributed in `contrib/chat/browser/openInVSCode.contribution.ts`, and its custom titlebar widget is registered in `contrib/chat/browser/openInVSCodeWidget.ts` (imported from `contrib/chat/browser/chat.contribution.ts`)
 
 ### 3.5 Panel Title Actions
 
@@ -557,7 +557,7 @@ src/vs/sessions/
 │   │   ├── changesView.ts
 │   │   └── media/
 │   ├── chat/browser/                       # Chat actions and services
-│   │   ├── chat.contribution.ts            # Open in VS Code, Open Terminal, branch chat, run script, prompts service
+│   │   ├── chat.contribution.ts            # Open in Pointer, Open Terminal, branch chat, run script, prompts service
 │   │   ├── branchChatSessionAction.ts      # Branch chat session action
 │   │   ├── runScriptAction.ts              # Run script contribution and split button
 │   │   └── promptsService.ts              # Agentic prompts service override
@@ -665,7 +665,7 @@ interface IPartVisibilityState {
 
 | Date | Change |
 |------|--------|
-| 2026-04-28 | Updated the sessions "Open in VS Code" titlebar widget to match the core "Open in Agents" affordance more closely: the product icon is greyscale by default, animates back to full color on hover/focus when motion is enabled, uses secondary-button hover chrome instead of quality-tinted backgrounds, and draws a separator before the Run split button. |
+| 2026-04-28 | Updated the sessions "Open in Pointer" titlebar widget to match the core "Open in Agents" affordance more closely: the product icon is greyscale by default, animates back to full color on hover/focus when motion is enabled, uses secondary-button hover chrome instead of quality-tinted backgrounds, and draws a separator before the Run split button. |
 | 2026-04-27 | Made the sessions shell gradient background the default treatment by removing the `sessions.experimental.shellGradientBackground` opt-in, always applying the root shell gradient layer, and renaming the workbench CSS hook to `shell-gradient-background`. |
 | 2026-04-23 | Updated mobile layout policy platform detection to use shared `platform.isMobile`, and reduced phone-layout CSS `!important` usage where selector specificity already provides stable overrides. |
 | 2026-04-22 | Increased the sessions titlebar account widget's GitHub profile image from `16px × 16px` to `18px × 18px` while keeping the existing `22px × 22px` control footprint and avatar border treatment. |
@@ -675,7 +675,7 @@ interface IPartVisibilityState {
 | 2026-04-22 | Updated the sessions auxiliary bar sizing rules so attached diff editors and integrated browser editors keep the normal 270px auxiliary-bar minimum width while disabling sash snap-to-close in that state, and the titlebar toggle continues to hide/show the secondary sidebar normally. |
 | 2026-04-22 | Updated the sessions **Maximize Editor** and **Restore Editor** actions so maximize hides the panel only when the terminal view is currently visible, and restore reopens that terminal panel when maximize hid it. |
 | 2026-04-21 | Renamed the command-center "Add Chat" titlebar action to "New Sub-Session" so the plus-button tooltip matches the sub-session workflow. |
-| 2026-04-21 | Removed the remaining left-margin spacing after the titlebar's VS Code and session-picker items, and dropped the command-center "Mark as Done" checkmark button next to the active session title. |
+| 2026-04-21 | Removed the remaining left-margin spacing after the titlebar's Pointer and session-picker items, and dropped the command-center "Mark as Done" checkmark button next to the active session title. |
 | 2026-04-21 | Removed the titlebar's vertical separator bars in favor of spacing-only group separation, and removed the dot separator between the active session title and its folder/worktree metadata. |
 | 2026-04-21 | Updated the sessions chat composite bar tabs to preserve each chat title's original casing instead of applying per-word capitalization. |
 | 2026-04-21 | Moved the sessions-only default notification placement to bottom-right and documented the sessions-specific notification center offsets: `15px` from the bottom/right or bottom/left edges, and `top: 40px; right: 15px;` for top-right placement. |

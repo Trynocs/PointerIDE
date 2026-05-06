@@ -11,7 +11,7 @@ The fastest way to see Copilot Chat traces locally — no cloud account required
 ### Prerequisites
 
 - **Docker** installed
-- **VS Code** with the GitHub Copilot Chat extension
+- **Pointer** with the GitHub Copilot Chat extension
 
 ### 1. Start the Aspire Dashboard
 
@@ -25,7 +25,7 @@ docker run --rm -d \
 
 This exposes the dashboard UI on port `18888` and an OTLP (HTTP) endpoint on port `4318`.
 
-### 2. Configure VS Code
+### 2. Configure Pointer
 
 Open **Settings** (`Ctrl+,`) and add:
 
@@ -36,7 +36,7 @@ Open **Settings** (`Ctrl+,`) and add:
 }
 ```
 
-> **Note:** You can also use environment variables instead of VS Code settings (see [Configuration](#configuration)). Environment variables always take precedence.
+> **Note:** You can also use environment variables instead of Pointer settings (see [Configuration](#configuration)). Environment variables always take precedence.
 
 ### 3. Generate Telemetry
 
@@ -60,7 +60,7 @@ docker stop aspire-dashboard
 
 ## Configuration
 
-### VS Code Settings
+### Pointer Settings
 
 Open **Settings** (`Ctrl+,`) and search for `copilot otel`:
 
@@ -76,7 +76,7 @@ Open **Settings** (`Ctrl+,`) and search for `copilot otel`:
 
 ### Environment Variables
 
-Environment variables **always take precedence** over VS Code settings.
+Environment variables **always take precedence** over Pointer settings.
 
 | Variable | Default | Description |
 |---|---|---|
@@ -418,7 +418,7 @@ All signals carry:
 |---|---|
 | `service.name` | `copilot-chat` (configurable via `OTEL_SERVICE_NAME`) |
 | `service.version` | Extension version |
-| `session.id` | Unique per VS Code window |
+| `session.id` | Unique per Pointer window |
 
 Add custom resource attributes with `OTEL_RESOURCE_ATTRIBUTES`:
 
@@ -440,7 +440,7 @@ These custom attributes are included in all traces, metrics, and events, allowin
 
 By default, **no prompt content, responses, or tool arguments are captured** — only metadata like model names, token counts, and durations.
 
-To capture full content, add to your VS Code settings:
+To capture full content, add to your Pointer settings:
 
 ```json
 {
@@ -536,7 +536,7 @@ When OTel is enabled, **all agent types** are automatically instrumented — no 
 
 ### Copilot CLI (Background Agent)
 
-The Copilot CLI SDK runs in the same VS Code process and produces a rich trace hierarchy including subagents, permissions, hooks, and tool calls:
+The Copilot CLI SDK runs in the same Pointer process and produces a rich trace hierarchy including subagents, permissions, hooks, and tool calls:
 
 ```
 copilot-chat invoke_agent copilotcli           [~45s]  ← extension wrapper
@@ -620,7 +620,7 @@ copilot-chat invoke_agent claude               [~33s]
 | `gen_ai.usage.cache_creation.input_tokens` | `39629` |
 | `copilot_chat.turn_count` | `8` |
 | `copilot_chat.total_cost_usd` | `0.067` (session-wide, includes subagents) |
-| `copilot_chat.chat_session_id` | VS Code session ID |
+| `copilot_chat.chat_session_id` | Pointer session ID |
 
 **`chat`** — one span per LLM API call, created by `chatMLFetcher` via the Claude language model proxy server. Same attributes as foreground agent `chat` spans (token usage, TTFT, response model, cache breakdown).
 
@@ -684,7 +684,7 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:4328/v1/traces \
   -X POST -H "Content-Type: application/json" -d '{"resourceSpans":[]}'
 ```
 
-**3. Configure VS Code:**
+**3. Configure Pointer:**
 
 Open **Settings** (`Ctrl+,`) and add:
 
@@ -771,7 +771,7 @@ service:
 docker run -d --name jaeger -p 16686:16686 -p 4318:4318 jaegertracing/jaeger:latest
 ```
 
-**2. Configure VS Code:**
+**2. Configure Pointer:**
 
 ```json
 {
@@ -796,7 +796,7 @@ docker run -d --name jaeger -p 16686:16686 -p 4318:4318 jaegertracing/jaeger:lat
 }
 ```
 
-Then set the auth header via environment variable (required — no VS Code setting for headers):
+Then set the auth header via environment variable (required — no Pointer setting for headers):
 
 ```bash
 export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Basic $(echo -n '<public-key>:<secret-key>' | base64)"

@@ -46,8 +46,8 @@ export class OpenRouterLMProvider extends AbstractOpenAICompatibleLMProvider {
 		);
 	}
 
-	protected override getModelsBaseUrl(): string | undefined {
-		return 'https://openrouter.ai/api/v1';
+	protected override getModelsBaseUrl(configuration: { baseUrl?: string; url?: string } | undefined): string | undefined {
+		return configuration?.baseUrl ?? configuration?.url ?? 'https://openrouter.ai/api/v1';
 	}
 
 	protected override getModelsDiscoveryUrl(modelsBaseUrl: string): string {

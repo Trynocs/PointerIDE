@@ -186,17 +186,17 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 		if (!this._tunnelCommand) {
 			let binParentLocation;
 			if (isMacintosh) {
-				// appRoot = /Applications/Visual Studio Code - Insiders.app/Contents/Resources/app
-				// bin = /Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin
+				// appRoot = /Applications/Pointer - Insiders.app/Contents/Resources/app
+				// bin = /Applications/Pointer - Insiders.app/Contents/Resources/app/bin
 				binParentLocation = this.environmentService.appRoot;
 			} else if (isWindows) {
 				if (this.productService.win32VersionedUpdate) {
-					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\<version>\resources\app
-					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\bin
+					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft Pointer Insiders\<version>\resources\app
+					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft Pointer Insiders\bin
 					binParentLocation = dirname(dirname(dirname(this.environmentService.appRoot)));
 				} else {
-					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\resources\app
-					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft VS Code Insiders\bin
+					// appRoot = C:\Users\<name>\AppData\Local\Programs\Microsoft Pointer Insiders\resources\app
+					// bin = C:\Users\<name>\AppData\Local\Programs\Microsoft Pointer Insiders\bin
 					binParentLocation = dirname(dirname(this.environmentService.appRoot));
 				}
 			} else {

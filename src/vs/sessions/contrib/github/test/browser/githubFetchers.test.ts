@@ -68,7 +68,7 @@ suite('GitHubRepositoryFetcher', () => {
 			owner: { login: 'microsoft' },
 			default_branch: 'main',
 			private: false,
-			description: 'Visual Studio Code',
+			description: 'Pointer',
 		});
 
 		const repo = await fetcher.getRepository('microsoft', 'vscode');
@@ -78,7 +78,7 @@ suite('GitHubRepositoryFetcher', () => {
 			fullName: 'microsoft/vscode',
 			defaultBranch: 'main',
 			isPrivate: false,
-			description: 'Visual Studio Code',
+			description: 'Pointer',
 		});
 		assert.strictEqual(mockApi.requestCalls[0].path, '/repos/microsoft/vscode');
 	});

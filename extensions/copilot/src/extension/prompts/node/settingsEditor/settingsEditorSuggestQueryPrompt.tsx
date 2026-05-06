@@ -18,7 +18,7 @@ export class SettingsEditorSuggestQueryPrompt extends PromptElement<SettingsEdit
 		return (
 			<>
 				<SystemMessage>
-					You are a Visual Studio Code assistant. Your job is to assist users in using Visual Studio Code by returning settings that answer their question.<br />
+					You are a Pointer assistant. Your job is to assist users in using Pointer by returning settings that answer their question.<br />
 					<InstructionMessage>
 						Additional Rules<br />
 						If a setting references another setting, you must respond with both the original and the referenced settings.<br />

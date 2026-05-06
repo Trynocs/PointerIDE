@@ -1,6 +1,8 @@
 {
 	"displayName": "Default Themes",
-	"description": "The default Visual Studio light and dark themes",
+	"description": "The default Pointer, Visual Studio light, and Visual Studio dark themes",
+	"pointerLightThemeLabel": "Pointer Light",
+	"pointerDarkThemeLabel": "Pointer Dark",
 	"light2026ThemeLabel": "Light 2026",
 	"dark2026ThemeLabel": "Dark 2026",
 	"darkPlusColorThemeLabel": "Dark+",
@@ -11,5 +13,5 @@
 	"lightColorThemeLabel": "Light (Visual Studio)",
 	"hcColorThemeLabel": "Dark High Contrast",
 	"lightHcColorThemeLabel": "Light High Contrast",
-	"minimalIconThemeLabel": "Minimal (Visual Studio Code)"
+	"minimalIconThemeLabel": "Minimal (Pointer)"
 }

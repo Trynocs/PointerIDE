@@ -36,7 +36,7 @@ function getDebPackageArch(arch: string): string {
 }
 
 function prepareDebPackage(arch: string) {
-	const binaryDir = '../VSCode-linux-' + arch;
+	const binaryDir = '../Pointer-linux-' + arch;
 	const debArch = getDebPackageArch(arch);
 	const destination = '.build/linux/deb/' + debArch + '/' + product.applicationName + '-' + debArch;
 
@@ -146,7 +146,7 @@ function getRpmPackageArch(arch: string): string {
 }
 
 function prepareRpmPackage(arch: string) {
-	const binaryDir = '../VSCode-linux-' + arch;
+	const binaryDir = '../Pointer-linux-' + arch;
 	const rpmArch = getRpmPackageArch(arch);
 	const stripBinary = process.env['STRIP'] ?? '/usr/bin/strip';
 
@@ -234,7 +234,7 @@ function getSnapBuildPath(arch: string): string {
 }
 
 function prepareSnapPackage(arch: string) {
-	const binaryDir = '../VSCode-linux-' + arch;
+	const binaryDir = '../Pointer-linux-' + arch;
 	const destination = getSnapBuildPath(arch);
 
 	return function () {

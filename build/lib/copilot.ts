@@ -17,7 +17,7 @@ export const copilotPlatforms = [
 ];
 
 /**
- * Converts VS Code build platform/arch to the values that Node.js reports
+ * Converts Pointer build platform/arch to the values that Node.js reports
  * at runtime via `process.platform` and `process.arch`.
  *
  * The copilot SDK's `loadNativeModule` looks up native binaries under
@@ -30,7 +30,7 @@ function toNodePlatformArch(platform: string, arch: string): { nodePlatform: str
 	let nodeArch = arch;
 
 	if (arch === 'armhf') {
-		// VS Code build uses 'armhf'; Node reports process.arch === 'arm'
+		// Pointer build uses 'armhf'; Node reports process.arch === 'arm'
 		nodeArch = 'arm';
 	} else if (arch === 'alpine') {
 		// Legacy: { platform: 'linux', arch: 'alpine' } means alpine-x64
@@ -47,7 +47,7 @@ function toNodePlatformArch(platform: string, arch: string): { nodePlatform: str
  *
  * For platforms the copilot SDK doesn't natively support (e.g. alpine, armhf),
  * ALL platform packages are stripped - that's fine because the copilot CLI SDK
- * resolves `node-pty` from the embedder (VS Code) first via `hostRequire`,
+ * resolves `node-pty` from the embedder (Pointer) first via `hostRequire`,
  * falling back to its bundled copy only if the embedder can't provide it.
  */
 export function getCopilotExcludeFilter(platform: string, arch: string): string[] {
@@ -57,7 +57,7 @@ export function getCopilotExcludeFilter(platform: string, arch: string): string[
 
 	// Strip wrong-architecture @github/copilot-{platform} packages.
 	// All copilot prebuilds are stripped by .moduleignore; the copilot CLI SDK
-	// resolves `node-pty` from VS Code's own node_modules via `hostRequire`.
+	// resolves `node-pty` from Pointer's own node_modules via `hostRequire`.
 	const excludes = nonTargetPlatforms.map(p => `!**/node_modules/@github/copilot-${p}/**`);
 
 	return ['**', ...excludes];
@@ -73,7 +73,7 @@ export function getCopilotExcludeFilter(platform: string, arch: string): string[
  * - marker:   node_modules/@github/copilot/shims.txt
  *
  * Note: `node-pty` is no longer shimmed. The copilot CLI SDK resolves
- * `node-pty` from the embedder (VS Code) via `hostRequire` and falls back to
+ * `node-pty` from the embedder (Pointer) via `hostRequire` and falls back to
  * its bundled copy only if that fails.
  *
  * Failures throw to fail the build because built-in packaging must guarantee

@@ -1,47 +1,22 @@
 @echo off
 setlocal
 
-title VSCode Dev
+set ROOT=%~dp0..
 
-pushd %~dp0\..
+if defined VSCODE_SKIP_PRELAUNCH goto :skip_prelaunch
 
-:: Get electron, compile, built-in extensions
-if "%VSCODE_SKIP_PRELAUNCH%"=="" (
-	node build/lib/preLaunch.ts
-)
+set "ELECTRON_RUN_AS_NODE=1"
+node "%ROOT%\build\lib\preLaunch.ts" || exit /b %errorlevel%
+set "ELECTRON_RUN_AS_NODE="
 
-set "NAMESHORT="
-for /f "tokens=2 delims=:," %%a in ('findstr /R /C:"\"nameShort\":.*" product.json') do if not defined NAMESHORT set "NAMESHORT=%%~a"
-set NAMESHORT=%NAMESHORT: "=%
-set NAMESHORT=%NAMESHORT:"=%.exe
-set CODE=".build\electron\%NAMESHORT%"
+:skip_prelaunch
 
-:: Manage built-in extensions
-if "%~1"=="--builtin" goto builtin
-
-:: Configuration
 set NODE_ENV=development
 set VSCODE_DEV=1
 set VSCODE_CLI=1
-set ELECTRON_ENABLE_LOGGING=1
 set ELECTRON_ENABLE_STACK_DUMPING=1
+set ELECTRON_ENABLE_LOGGING=1
 
-set DISABLE_TEST_EXTENSION="--disable-extension=vscode.vscode-api-tests"
-for %%A in (%*) do (
-	if "%%~A"=="--extensionTestsPath" (
-		set DISABLE_TEST_EXTENSION=""
-	)
-)
+for /f "usebackq delims=" %%A in (`node -p "require('./product.json').applicationName"`) do set APP_NAME=%%A
 
-:: Launch Code
-%CODE% . %DISABLE_TEST_EXTENSION% %*
-goto end
-
-:builtin
-%CODE% build/builtin
-
-:end
-
-popd
-
-endlocal
+"%ROOT%\.build\electron\%APP_NAME%.exe" . --disable-extension=vscode.vscode-api-tests %*

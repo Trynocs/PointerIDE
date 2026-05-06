@@ -144,9 +144,9 @@ suite('Post Report Conversation Callback', () => {
 			postReportFn
 		);
 
-		testObj.apply('', { text: `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Visual Studio Code. I'm not equipped to provide a definition of a computer. [RESPONSE END]` });
+		testObj.apply('', { text: `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Pointer. I'm not equipped to provide a definition of a computer. [RESPONSE END]` });
 
-		assert.strictEqual((progress[0] as ChatAgentContent).content, `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Visual Studio Code. I'm not equipped to provide a definition of a computer. [RESPONSE END]`);
+		assert.strictEqual((progress[0] as ChatAgentContent).content, `I'm sorry, but as an AI programming assistant, I'm here to provide assistance with software development topics, specifically related to Pointer. I'm not equipped to provide a definition of a computer. [RESPONSE END]`);
 	});
 
 	teardown(() => sinon.restore());

@@ -20,7 +20,7 @@ import { Menus } from '../../../browser/menus.js';
 const OpenInVSCodeActionId = 'chat.openSessionWorktreeInVSCode';
 
 /**
- * Renders the "Open in VS Code" titlebar entry as an icon-only button that
+ * Renders the "Open in Pointer" titlebar entry as an icon-only button that
  * expands to reveal a label on hover / keyboard focus.
  */
 class OpenInVSCodeTitleBarWidget extends BaseActionViewItem {
@@ -47,7 +47,7 @@ class OpenInVSCodeTitleBarWidget extends BaseActionViewItem {
 			container.setAttribute('data-product-quality', quality);
 		}
 
-		const label = this.action.label || localize('openInVSCodeLabel', "Open in VS Code");
+		const label = this.action.label || localize('openInVSCodeLabel', "Open in Pointer");
 		container.setAttribute('aria-label', label);
 		this._register(this.hoverService.setupManagedHover(getDefaultHoverDelegate('element'), container, label));
 
@@ -66,7 +66,7 @@ class OpenInVSCodeTitleBarWidget extends BaseActionViewItem {
 
 /**
  * Workbench contribution that registers the custom action view item for
- * the "Open in VS Code" action in the sessions titlebar toolbar, replacing
+ * the "Open in Pointer" action in the sessions titlebar toolbar, replacing
  * the default icon-only codicon with a rich expandable widget.
  */
 class OpenInVSCodeWidgetContribution extends Disposable implements IWorkbenchContribution {

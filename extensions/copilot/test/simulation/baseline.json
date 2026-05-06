@@ -4295,7 +4295,7 @@
     "score": 1
   },
   {
-    "name": "intent [panel] - [relaxed] [builtin] How to change colour theme in VS Code?",
+    "name": "intent [panel] - [relaxed] [builtin] How to change colour theme in Pointer?",
     "contentFilterCount": 0,
     "passCount": 10,
     "failCount": 0,
@@ -5289,7 +5289,7 @@
     "score": 1
   },
   {
-    "name": "intent [panel] - [strict] [builtin] How to change colour theme in VS Code?",
+    "name": "intent [panel] - [strict] [builtin] How to change colour theme in Pointer?",
     "contentFilterCount": 0,
     "passCount": 10,
     "failCount": 0,
@@ -5786,7 +5786,7 @@
     "score": 1
   },
   {
-    "name": "multifile-edit [panel] [typescript] - add a command and dependency to a VS Code extension",
+    "name": "multifile-edit [panel] [typescript] - add a command and dependency to a Pointer extension",
     "contentFilterCount": 0,
     "passCount": 10,
     "failCount": 0,
@@ -5884,7 +5884,7 @@
     "score": 1
   },
   {
-    "name": "multifile-edit-claude [panel] [typescript] - add a command and dependency to a VS Code extension - (claude-3.5-sonnet)",
+    "name": "multifile-edit-claude [panel] [typescript] - add a command and dependency to a Pointer extension - (claude-3.5-sonnet)",
     "contentFilterCount": 0,
     "passCount": 10,
     "failCount": 0,

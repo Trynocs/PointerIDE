@@ -6,7 +6,6 @@ import type { Disposable, LanguageModelChatInformation, LanguageModelDataPart, L
 import { CopilotToken } from '../../../platform/authentication/common/copilotToken';
 import { ICAPIClientService } from '../../../platform/endpoint/common/capiClient';
 import { EndpointEditToolName, IChatModelInformation, ModelSupportedEndpoint } from '../../../platform/endpoint/common/endpointProvider';
-import { isScenarioAutomation } from '../../../platform/env/common/envService';
 import { TokenizerType } from '../../../util/common/tokenizer';
 
 export const enum BYOKAuthType {
@@ -73,6 +72,100 @@ export interface BYOKModelRegistry {
 
 // Many model providers don't have robust model lists. This allows us to map id -> information about models, and then if we don't know the model just let the user enter a custom id
 export type BYOKKnownModels = Record<string, BYOKModelCapabilities>;
+
+export function inferBYOKModelCapabilities(modelId: string, modelData?: unknown): BYOKModelCapabilities {
+	const lowerId = modelId.toLowerCase();
+	const data = isRecord(modelData) ? modelData : undefined;
+	const architecture = isRecord(data?.architecture) ? data.architecture : undefined;
+	const topProvider = isRecord(data?.top_provider) ? data.top_provider : undefined;
+	const supportedParameters = Array.isArray(data?.supported_parameters) ? data.supported_parameters.filter((value): value is string => typeof value === 'string') : [];
+	const modalities = [
+		...readStringArray(data?.modalities),
+		...readStringArray(data?.input_modalities),
+		...readStringArray(architecture?.input_modalities),
+		...(typeof architecture?.modality === 'string' ? [architecture.modality] : []),
+	].map(value => value.toLowerCase());
+
+	const maxInputTokens =
+		readPositiveNumber(data?.maxInputTokens) ??
+		readPositiveNumber(data?.max_input_tokens) ??
+		readPositiveNumber(data?.max_context_length) ??
+		readPositiveNumber(data?.context_length) ??
+		readPositiveNumber(data?.context_window) ??
+		readPositiveNumber(data?.input_token_limit) ??
+		readPositiveNumber(topProvider?.context_length) ??
+		inferContextWindow(lowerId);
+
+	const maxOutputTokens =
+		readPositiveNumber(data?.maxOutputTokens) ??
+		readPositiveNumber(data?.max_output_tokens) ??
+		readPositiveNumber(data?.max_completion_tokens) ??
+		readPositiveNumber(data?.output_token_limit) ??
+		inferMaxOutputTokens(lowerId);
+
+	const isNonChatModel = includesAny(lowerId, ['embedding', 'embed', 'whisper', 'tts', 'moderation', 'rerank', 'text-to-speech', 'speech-to-text']);
+	const toolCalling = !isNonChatModel && (supportedParameters.includes('tools') || supportedParameters.includes('tool_choice') || !includesAny(lowerId, ['instruct', 'base']));
+	const vision = modalities.includes('image') || modalities.includes('multimodal') || includesAny(lowerId, ['vision', 'vl', 'llava', 'pixtral', 'gpt-4o', 'omni', 'gemini', 'claude-3']);
+	const thinking = includesAny(lowerId, ['o1', 'o3', 'o4', 'reasoning', 'deepseek-r1', 'qwen3', 'claude-3.7', 'claude-4', 'gemini-2.5']);
+	const supportsResponses = includesAny(lowerId, ['gpt-4.1', 'gpt-4o', 'gpt-5', 'o1', 'o3', 'o4']);
+
+	return {
+		name: readDisplayName(modelId, data),
+		maxInputTokens,
+		maxOutputTokens,
+		toolCalling,
+		vision,
+		thinking,
+		adaptiveThinking: thinking || undefined,
+		streaming: true,
+		supportedEndpoints: supportsResponses ? [ModelSupportedEndpoint.ChatCompletions, ModelSupportedEndpoint.Responses] : undefined,
+		supportsReasoningEffort: thinking ? ['low', 'medium', 'high'] : undefined
+	};
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null;
+}
+
+function readStringArray(value: unknown): string[] {
+	return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+}
+
+function readPositiveNumber(value: unknown): number | undefined {
+	if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+		return undefined;
+	}
+	return Math.round(value);
+}
+
+function readDisplayName(modelId: string, data: Record<string, unknown> | undefined): string {
+	const name = data?.name ?? data?.display_name;
+	return typeof name === 'string' && name.trim() ? name.trim() : modelId;
+}
+
+function includesAny(value: string, needles: readonly string[]): boolean {
+	return needles.some(needle => value.includes(needle));
+}
+
+function inferContextWindow(lowerModelId: string): number {
+	if (includesAny(lowerModelId, ['gemini-1.5', 'gemini-2', 'gpt-4.1'])) {
+		return 1000000;
+	}
+	if (includesAny(lowerModelId, ['claude', 'qwen3-coder', 'deepseek', 'grok', 'llama-4'])) {
+		return 200000;
+	}
+	if (includesAny(lowerModelId, ['gpt-4o', 'gpt-5', 'o1', 'o3', 'o4', 'llama', 'mistral', 'mixtral'])) {
+		return 128000;
+	}
+	return 128000;
+}
+
+function inferMaxOutputTokens(lowerModelId: string): number {
+	if (includesAny(lowerModelId, ['claude', 'gemini', 'reasoning', 'o1', 'o3', 'o4', 'qwen3'])) {
+		return 16384;
+	}
+	return 8192;
+}
 
 // Type guards to ensure correct config type
 export function isGlobalKeyConfig(config: BYOKModelConfig): config is BYOKGlobalKeyModelConfig {
@@ -159,14 +252,8 @@ export function byokKnownModelToAPIInfo(providerName: string, id: string, capabi
 	};
 }
 
-export function isBYOKEnabled(copilotToken: Omit<CopilotToken, 'token'>, capiClientService: ICAPIClientService): boolean {
-	if (isScenarioAutomation) {
-		return true;
-	}
-
-	const isGHE = capiClientService.dotcomAPIURL !== 'https://api.github.com';
-	const byokAllowed = (copilotToken.isInternal || copilotToken.isIndividual || copilotToken.isClientBYOKEnabled()) && !isGHE;
-	return byokAllowed;
+export function isBYOKEnabled(_copilotToken: Omit<CopilotToken, 'token'>, _capiClientService: ICAPIClientService): boolean {
+	return true;
 }
 
 /**

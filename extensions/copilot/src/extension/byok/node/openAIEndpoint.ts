@@ -302,9 +302,16 @@ export class OpenAIEndpoint extends ChatEndpoint {
 		const headers: Record<string, string> = {
 			'Content-Type': 'application/json'
 		};
-		if (this._modelUrl.includes('openai.azure')) {
+		const authType = this.modelMetadata.authType ?? (this._modelUrl.includes('openai.azure') ? 'header' : 'bearer');
+		if (authType === 'header' && this._apiKey) {
+			headers[this.modelMetadata.authHeaderName || 'api-key'] = this._apiKey;
+		} else if (authType === 'bearer' && this._apiKey) {
+			headers['Authorization'] = `Bearer ${this._apiKey}`;
+		} else if (authType === 'none') {
+			// No authentication header required.
+		} else if (this._modelUrl.includes('openai.azure') && this._apiKey) {
 			headers['api-key'] = this._apiKey;
-		} else {
+		} else if (this._apiKey) {
 			headers['Authorization'] = `Bearer ${this._apiKey}`;
 		}
 		for (const [key, value] of Object.entries(this._customHeaders)) {

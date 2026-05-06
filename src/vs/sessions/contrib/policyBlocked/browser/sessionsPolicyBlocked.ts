@@ -93,14 +93,14 @@ export class SessionsPolicyBlockedOverlay extends Disposable {
 		append(description, document.createTextNode(' '));
 		const learnMore = append(description, $('a.sessions-policy-blocked-link')) as HTMLAnchorElement;
 		learnMore.textContent = localize('policyBlocked.learnMore', "Learn more");
-		learnMore.href = 'https://aka.ms/VSCode/Agents/docs';
+		learnMore.href = 'https://github.com/pointer-editor/pointer/docs';
 		this._register(addDisposableListener(learnMore, EventType.CLICK, (e) => {
 			e.preventDefault();
-			this.openerService.open(URI.parse('https://aka.ms/VSCode/Agents/docs'));
+			this.openerService.open(URI.parse('https://github.com/pointer-editor/pointer/docs'));
 		}));
 
 		const button = this._register(new Button(card, { ...defaultButtonStyles, secondary: true }));
-		button.label = localize('policyBlocked.openVSCode', "Open VS Code");
+		button.label = localize('policyBlocked.openVSCode', "Open Pointer");
 		this._register(button.onDidClick(() => this._openVSCode()));
 	}
 
@@ -145,10 +145,10 @@ export class SessionsPolicyBlockedOverlay extends Disposable {
 		append(footer, document.createTextNode(' '));
 		const learnMore = append(footer, $('a.sessions-policy-blocked-link')) as HTMLAnchorElement;
 		learnMore.textContent = localize('accountGate.learnMore', "Learn more");
-		learnMore.href = 'https://code.visualstudio.com/docs/enterprise/overview';
+		learnMore.href = 'https://github.com/pointer-editor/pointer/docs/enterprise';
 		this._register(addDisposableListener(learnMore, EventType.CLICK, (e) => {
 			e.preventDefault();
-			this.openerService.open(URI.parse('https://code.visualstudio.com/docs/enterprise/overview'));
+			this.openerService.open(URI.parse('https://github.com/pointer-editor/pointer/docs/enterprise'));
 		}));
 
 		const signInButton = this._register(new Button(card, { ...defaultButtonStyles }));

@@ -521,7 +521,7 @@ export class RemoteAgentHostContribution extends Disposable implements IWorkbenc
 
 	/**
 	 * Authenticate using protectedResources from agent info in root state.
-	 * Resolves tokens via the standard VS Code authentication service.
+	 * Resolves tokens via the standard Pointer authentication service.
 	 *
 	 * Marks the matching provider's `authenticationPending` observable while
 	 * the auth pass is in flight so that sessions surface as still loading.

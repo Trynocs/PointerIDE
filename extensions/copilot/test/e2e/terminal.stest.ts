@@ -386,14 +386,14 @@ for (const shellType of supportedShells) {
 					/pkill( -f)? "?code"?/,
 					'kill (pidof code)',
 					/kill \(pgrep [cC]ode\)/,
-					/killall (vscode|[cC]ode|["']Visual Studio Code["'])/,
+					/killall (vscode|[cC]ode|["']Pointer["'])/,
 				],
 				default: [
 					/pkill( -f)? "?code"?/,
-					/pkill -f ["']Visual Studio Code["']/,
-					/killall (vscode|[cC]ode|["']Visual Studio Code["'])/,
+					/pkill -f ["']Pointer["']/,
+					/killall (vscode|[cC]ode|["']Pointer["'])/,
 					'kill $(pgrep code)',
-					/kill \$\(pgrep -f ["']Visual Studio Code["']\)/,
+					/kill \$\(pgrep -f ["']Pointer["']\)/,
 				]
 			},
 			acceptableAnswers: {

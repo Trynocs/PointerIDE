@@ -440,16 +440,16 @@ class ESRPReleaseService {
 			owners: [{ owner: { userPrincipalName: 'jomo@microsoft.com' } }],
 			approvers: [{ approver: { userPrincipalName: 'jomo@microsoft.com' }, isAutoApproved: true, isMandatory: false }],
 			releaseInfo: {
-				title: 'VS Code',
+				title: 'Pointer',
 				properties: {
 					'ReleaseContentType': 'InstallPackage'
 				},
 				minimumNumberOfApprovers: 1
 			},
 			productInfo: {
-				name: 'VS Code',
+				name: 'Pointer',
 				version,
-				description: 'VS Code'
+				description: 'Pointer'
 			},
 			accessPermissionsInfo: {
 				mainPublisher: 'VSCode',

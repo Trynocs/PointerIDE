@@ -42,7 +42,7 @@ import {
 	getOnboardingStepTitle,
 	getOnboardingStepSubtitle,
 } from '../common/onboardingTypes.js';
-import { IOnboardingService } from '../common/onboardingService.js';
+import { IOnboardingService, IOnboardingShowOptions } from '../common/onboardingService.js';
 
 type OnboardingStepViewClassification = {
 	owner: 'cwebster-99';
@@ -118,10 +118,11 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 
 	private readonly footerFocusableElements: HTMLElement[] = [];
 	private readonly stepFocusableElements: HTMLElement[] = [];
-	private selectedThemeId = 'dark-2026';
+	private selectedThemeId = 'pointer-dark';
 	private selectedKeymapId = 'vscode';
 	private _detectedEditorIds: Set<string> | undefined;
 	private _userSignedIn = false;
+	private _requireSignIn = false;
 	private selectedAiMode: AiCollaborationMode = AiCollaborationMode.Balanced;
 
 	constructor(
@@ -151,17 +152,36 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 
 		// Start detecting installed editors early so results are ready by the Personalize step
 		this._detectInstalledEditors().then(ids => { this._detectedEditorIds = ids; });
+
+		this._register(this.defaultAccountService.onDidChangeDefaultAccount(account => {
+			this._userSignedIn = !!account;
+			if (account) {
+				this._requireSignIn = false;
+			}
+			this._updateButtonStates();
+		}));
 	}
 
 	get isShowing(): boolean {
 		return this._isShowing;
 	}
 
-	show(): void {
+	show(options?: IOnboardingShowOptions): void {
 		if (this.overlay) {
+			if (options?.requireSignIn && !this.defaultAccountService.currentDefaultAccount) {
+				this._userSignedIn = false;
+				this._requireSignIn = true;
+				this.currentStepIndex = 0;
+				this._renderStep();
+				this._renderProgress();
+				this._updateButtonStates();
+				this._focusCurrentStepElement();
+			}
 			return;
 		}
 
+		this._userSignedIn = !!this.defaultAccountService.currentDefaultAccount;
+		this._requireSignIn = !!options?.requireSignIn && !this._userSignedIn;
 		this._isShowing = true;
 		this.previouslyFocusedElement = getActiveWindow().document.activeElement as HTMLElement | undefined;
 
@@ -171,7 +191,7 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 		this.overlay = append(container, $('.onboarding-a-overlay'));
 		this.overlay.setAttribute('role', 'dialog');
 		this.overlay.setAttribute('aria-modal', 'true');
-		this.overlay.setAttribute('aria-label', localize('onboarding.a.aria', "Welcome to Visual Studio Code"));
+		this.overlay.setAttribute('aria-label', localize('onboarding.a.aria', "Welcome to Pointer"));
 
 		// Card
 		this.card = append(this.overlay, $('.onboarding-a-card'));
@@ -215,6 +235,9 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 
 		// Event handlers
 		this.disposables.add(addDisposableListener(this.closeButton, EventType.CLICK, () => {
+			if (this._isDismissBlocked()) {
+				return;
+			}
 			this._logAction('skip');
 			this._dismiss('skip');
 		}));
@@ -227,6 +250,10 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 				this._logAction('complete');
 				this._dismiss('complete');
 			} else if (this.currentStepIndex === 0) {
+				if (this._requireSignIn && !this._userSignedIn) {
+					this._focusCurrentStepElement();
+					return;
+				}
 				this._logAction('continueWithoutSignIn');
 				this._nextStep();
 			} else {
@@ -236,7 +263,7 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 		}));
 
 		this.disposables.add(addDisposableListener(this.overlay, EventType.MOUSE_DOWN, (e: MouseEvent) => {
-			if (e.target === this.overlay) {
+			if (e.target === this.overlay && !this._isDismissBlocked()) {
 				this._dismiss('skip');
 			}
 		}));
@@ -249,7 +276,9 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 
 			if (event.keyCode === KeyCode.Escape) {
 				e.preventDefault();
-				this._dismiss('skip');
+				if (!this._isDismissBlocked()) {
+					this._dismiss('skip');
+				}
 				return;
 			}
 
@@ -266,6 +295,10 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 		});
 
 		this._focusCurrentStepElement();
+	}
+
+	private _isDismissBlocked(): boolean {
+		return this._requireSignIn && !this._userSignedIn;
 	}
 
 	private _dismiss(reason: 'complete' | 'skip'): void {
@@ -398,18 +431,28 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 	}
 
 	private _updateButtonStates(): void {
+		if (this.closeButton) {
+			this.closeButton.style.display = this._isDismissBlocked() ? 'none' : '';
+		}
 		if (this.backButton) {
 			this.backButton.style.display = this.currentStepIndex === 0 ? 'none' : '';
 		}
 		if (this.nextButton) {
 			if (this.currentStepIndex === 0) {
-				// Sign-in step: secondary "Continue without Signing In"
-				this.nextButton.className = 'onboarding-a-btn onboarding-a-btn-secondary';
-				this.nextButton.textContent = localize('onboarding.continueWithoutSignIn', "Continue without Signing In");
+				if (this._isDismissBlocked()) {
+					this.nextButton.style.display = 'none';
+				} else {
+					this.nextButton.style.display = '';
+					// Sign-in step: secondary "Continue without Signing In"
+					this.nextButton.className = 'onboarding-a-btn onboarding-a-btn-secondary';
+					this.nextButton.textContent = localize('onboarding.continueWithoutSignIn', "Continue without Signing In");
+				}
 			} else if (this._isLastStep()) {
+				this.nextButton.style.display = '';
 				this.nextButton.className = 'onboarding-a-btn onboarding-a-btn-primary';
 				this.nextButton.textContent = localize('onboarding.getStarted', "Get Started");
 			} else {
+				this.nextButton.style.display = '';
 				this.nextButton.className = 'onboarding-a-btn onboarding-a-btn-primary';
 				this.nextButton.textContent = localize('onboarding.next', "Continue");
 			}
@@ -452,7 +495,7 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 		const content = append(wrapper, $('.onboarding-a-signin-content'));
 		const contentMain = append(content, $('.onboarding-a-signin-content-main'));
 		const title = append(contentMain, $('h2.onboarding-a-signin-title'));
-		title.textContent = localize('onboarding.signIn.heroTitle', "Welcome to VS Code");
+		title.textContent = localize('onboarding.signIn.heroTitle', "Welcome to Pointer");
 
 		const subtitle = append(contentMain, $('p.onboarding-a-signin-subtitle'));
 		subtitle.textContent = localize('onboarding.signIn.heroSubtitle', "Sign in to continue with AI-powered development.");
@@ -762,7 +805,7 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 			this._createKbd(localize('onboarding.personalize.tip.shift', "Shift")),
 			'+',
 			this._createKbd(localize('onboarding.personalize.tip.p', "P")),
-			localize('onboarding.personalize.tip.suffix', " to access all VS Code commands."),
+			localize('onboarding.personalize.tip.suffix', " to access all Pointer commands."),
 		);
 	}
 
@@ -823,7 +866,7 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 	private async _applyKeymap(keymapId: string): Promise<void> {
 		const keymap = (product.onboardingKeymaps ?? []).find(k => k.id === keymapId);
 		if (!keymap?.extensionId) {
-			return; // VS Code default, nothing to install
+			return; // Pointer default, nothing to install
 		}
 
 		try {
@@ -1149,7 +1192,7 @@ export class OnboardingVariationA extends Disposable implements IOnboardingServi
 
 	private _focusCurrentStepElement(): void {
 		const stepFocusable = this.stepFocusableElements.find(element => this._isTabbable(element));
-		(stepFocusable ?? this.nextButton ?? this.closeButton)?.focus();
+		(stepFocusable ?? this._getFocusableElements()[0])?.focus();
 	}
 
 	private _registerStepFocusable<T extends HTMLElement>(element: T): T {

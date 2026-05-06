@@ -178,7 +178,7 @@ class Builds {
 			// Every platform has its own name scheme, hilarious right?
 			// - macOS: just the name, nice! (e.g. VSCode-darwin.zip)
 			// - Linux: includes some unix timestamp (e.g. code-insider-x64-1639979337.tar.gz)
-			// - Windows: includes the version (e.g. VSCode-win32-x64-1.64.0-insider.zip)
+			// - Windows: includes the version (e.g. Pointer-win32-x64-1.64.0-insider.zip)
 			case Runtime.DesktopLocal:
 				switch (platform) {
 					case Platform.MacOSX64:
@@ -192,7 +192,7 @@ class Builds {
 					case Platform.WindowsArm: {
 						const buildMeta = await this.fetchBuildMeta({ runtime, commit });
 
-						return platform === Platform.WindowsX64 ? `VSCode-win32-x64-${buildMeta.productVersion}.zip` : `VSCode-win32-arm64-${buildMeta.productVersion}.zip`;
+						return platform === Platform.WindowsX64 ? `Pointer-win32-x64-${buildMeta.productVersion}.zip` : `Pointer-win32-arm64-${buildMeta.productVersion}.zip`;
 					}
 				}
 		}
@@ -217,12 +217,12 @@ class Builds {
 				}
 
 			// Here, only Windows does not play by our rules and adds the version number
-			// - Windows: includes the version (e.g. VSCode-win32-x64-1.64.0-insider)
+			// - Windows: includes the version (e.g. Pointer-win32-x64-1.64.0-insider)
 			case Runtime.DesktopLocal:
 				switch (platform) {
 					case Platform.MacOSX64:
 					case Platform.MacOSArm:
-						return 'Visual Studio Code - Insiders.app';
+						return 'Pointer - Insiders.app';
 					case Platform.LinuxX64:
 						return 'VSCode-linux-x64';
 					case Platform.LinuxArm:
@@ -231,7 +231,7 @@ class Builds {
 					case Platform.WindowsArm: {
 						const buildMeta = await this.fetchBuildMeta({ runtime, commit });
 
-						return platform === Platform.WindowsX64 ? `VSCode-win32-x64-${buildMeta.productVersion}` : `VSCode-win32-arm64-${buildMeta.productVersion}`;
+						return platform === Platform.WindowsX64 ? `Pointer-win32-x64-${buildMeta.productVersion}` : `Pointer-win32-arm64-${buildMeta.productVersion}`;
 					}
 				}
 		}

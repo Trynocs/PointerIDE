@@ -109,7 +109,7 @@ function parseArgs() {
 					'Options:',
 					'  --runs <n>          Number of runs per scenario (default: 5)',
 					'  --scenario <id>     Scenario to run (repeatable; default: all)',
-					'  --build <path|ver>  Path to VS Code build, or a version to download',
+					'  --build <path|ver>  Path to Pointer build, or a version to download',
 					'                       (e.g. "1.110.0", "insiders", commit hash, or local path)',
 					'  --baseline <path>   Compare against a baseline JSON file',
 					'  --baseline-build <v> Version or path to benchmark as baseline',
@@ -121,9 +121,9 @@ function parseArgs() {
 					'  --threshold <frac>  Regression threshold fraction (default: 0.2 = 20%)',
 					'  --production-build  Build a local bundled package (via gulp vscode) for',
 					'                       apples-to-apples comparison against a release baseline',
-					'  --setting <k=v>     Set a VS Code setting override for all builds (repeatable)',
-					'  --test-setting <k=v> Set a VS Code setting override for test build only',
-					'  --baseline-setting <k=v> Set a VS Code setting override for baseline build only',
+					'  --setting <k=v>     Set a Pointer setting override for all builds (repeatable)',
+					'  --test-setting <k=v> Set a Pointer setting override for test build only',
+					'  --baseline-setting <k=v> Set a Pointer setting override for baseline build only',
 					'                       e.g. --setting chat.experimental.incrementalRendering.enabled=true',
 					'  --no-cache          Ignore cached baseline data, always run fresh',
 					'  --force             Skip build mode mismatch confirmation',
@@ -183,7 +183,7 @@ function buildModeLabel(mode) {
 // -- Production build --------------------------------------------------------
 
 /**
- * Build a local production (bundled) VS Code package using `gulp vscode`.
+ * Build a local production (bundled) Pointer package using `gulp vscode`.
  * Returns the path to the Electron executable in the packaged output.
  *
  * The gulp task compiles TypeScript, bundles JS, and packages with Electron
@@ -360,7 +360,7 @@ function exceedsThreshold(threshold, change, absoluteDelta) {
  * @param {string} runIndex
  * @param {string} runDir - timestamped run directory for diagnostics
  * @param {'baseline' | 'test'} role - whether this is a baseline or test run
- * @param {Record<string, any>} [settingsOverrides] - custom VS Code settings
+ * @param {Record<string, any>} [settingsOverrides] - custom Pointer settings
  * @param {{ heapSnapshots?: boolean }} [runOpts] - additional run options
  * @returns {Promise<RunMetrics>}
  */
@@ -369,9 +369,9 @@ async function runOnce(electronPath, scenario, mockServer, verbose, runIndex, ru
 	const { userDataDir, extDir, logsDir } = prepareRunDir(runIndex, mockServer, settingsOverrides);
 	const isDevBuild = !electronPath.includes('.vscode-test') && !electronPath.includes('VSCode-');
 	// Extract a clean build label from the path.
-	// Dev:          .build/electron/Code - OSS.app/.../Code - OSS  → "dev"
-	// Stable:       .vscode-test/vscode-darwin-arm64-1.115.0/Visual Studio Code.app/.../Electron → "1.115.0"
-	// Production:   ../VSCode-darwin-arm64/Code - OSS.app/.../Code - OSS → "production"
+	// Dev:          .build/electron/Pointer.app/.../Pointer  → "dev"
+	// Stable:       .vscode-test/vscode-darwin-arm64-1.115.0/Pointer.app/.../Electron → "1.115.0"
+	// Production:   ../VSCode-darwin-arm64/Pointer.app/.../Pointer → "production"
 	let buildLabel = 'dev';
 	if (!isDevBuild) {
 		const vscodeTestMatch = electronPath.match(/vscode-test\/vscode-[^/]*?-(\d+\.\d+\.\d+)/);
@@ -842,14 +842,14 @@ async function runOnce(electronPath, scenario, mockServer, verbose, runIndex, ru
 		await vscode.close();
 	}
 
-	// Read the trace file written by VS Code on exit via --trace-startup-file
+	// Read the trace file written by Pointer on exit via --trace-startup-file
 	/** @type {Array<any>} */
 	let traceEvents = [];
 	try {
 		const traceData = JSON.parse(fs.readFileSync(tracePath, 'utf-8'));
 		traceEvents = traceData.traceEvents || [];
 	} catch {
-		// Trace file may not exist if VS Code crashed before shutdown
+		// Trace file may not exist if Pointer crashed before shutdown
 	}
 
 	// Extract code/chat/* perf marks from blink.user_timing trace events.

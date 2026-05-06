@@ -1,6 +1,6 @@
 # Claude Code Integration
 
-This folder contains the Claude Code integration for VS Code Chat. It enables users to open a new Chat window and interact with a Claude Code instance directly within VS Code. **VS Code provides the UI, Claude Code provides the smarts.**
+This folder contains the Claude Code integration for Pointer Chat. It enables users to open a new Chat window and interact with a Claude Code instance directly within Pointer. **Pointer provides the UI, Claude Code provides the smarts.**
 
 > 📖 **New to the Claude session target?** See the **[User Guide](./CLAUDE_SESSION_USER_GUIDE.md)** for a comprehensive walkthrough of features, slash commands, permission modes, and best practices.
 
@@ -50,7 +50,7 @@ This folder contains the Claude Code integration for VS Code Chat. It enables us
 
 ## Overview
 
-The Claude Code integration allows VS Code's chat interface to communicate with Claude Code, Anthropic's agentic coding assistant. When a user sends a message in a VS Code Chat window using this integration, the message is routed to a Claude Code session that can:
+The Claude Code integration allows Pointer's chat interface to communicate with Claude Code, Anthropic's agentic coding assistant. When a user sends a message in a Pointer Chat window using this integration, the message is routed to a Claude Code session that can:
 
 - Read and analyze code
 - Execute shell commands
@@ -58,13 +58,13 @@ The Claude Code integration allows VS Code's chat interface to communicate with 
 - Search the workspace
 - Manage tasks and todos
 
-All interactions are displayed through VS Code's native chat UI, providing a seamless experience.
+All interactions are displayed through Pointer's native chat UI, providing a seamless experience.
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         VS Code Chat UI                          │
+│                         Pointer Chat UI                          │
 └─────────────────────────┬───────────────────────────────────────┘
                           │
                           ▼
@@ -98,20 +98,20 @@ All interactions are displayed through VS Code's native chat UI, providing a sea
 ### `node/claudeCodeAgent.ts`
 
 **ClaudeAgentManager**
-- Entry point for handling chat requests from VS Code
+- Entry point for handling chat requests from Pointer
 - Starts and manages the language model server (`LanguageModelServer`)
 - Creates and caches `ClaudeCodeSession` instances by session ID
-- Resolves prompts by replacing VS Code references (files, locations) with actual paths
+- Resolves prompts by replacing Pointer references (files, locations) with actual paths
 
 **ClaudeCodeSession**
 - Represents a single Claude Code conversation session
-- Manages a queue of incoming requests from VS Code Chat
+- Manages a queue of incoming requests from Pointer Chat
 - Uses an async iterable to feed prompts to Claude Code SDK
 - Processes three message types:
   - **Assistant messages**: Text responses and tool use requests
   - **User messages**: Tool results from executed tools
   - **Result messages**: Session completion or error states
-- Handles tool confirmation dialogs via VS Code's chat API
+- Handles tool confirmation dialogs via Pointer's chat API
 - Auto-approves safe operations (file edits in workspace)
 - Tracks external edits to show proper diffs
 
@@ -164,25 +164,25 @@ Defines Claude Code's tool interface:
 
 ### `common/toolInvocationFormatter.ts`
 
-Formats tool invocations for display in VS Code's chat UI:
+Formats tool invocations for display in Pointer's chat UI:
 - Creates `ChatToolInvocationPart` instances with appropriate messaging
 - Handles tool-specific formatting (Bash commands, file reads, searches, etc.)
 - Suppresses certain tools from display (TodoWrite, Edit, Write) where other UI handles them
 
 ### `../../chatSessions/vscode-node/chatHistoryBuilder.ts`
 
-Converts a persisted `IClaudeCodeSession` into VS Code `ChatResponsePart[]` for replay in the chat UI:
+Converts a persisted `IClaudeCodeSession` into Pointer `ChatResponsePart[]` for replay in the chat UI:
 - Reconstructs assistant text, thinking blocks, tool invocations, and tool results into chat response parts
 - Matches subagent sessions to their spawning Agent/Task tool_use blocks using `ISubagentSession.parentToolUseId`, injecting the subagent's tool calls inline under the parent tool invocation
 
 ## Message Flow
 
-1. **User sends message** in VS Code Chat
+1. **User sends message** in Pointer Chat
 2. **ClaudeAgentManager** receives the request and routes to existing or new session
 3. **ClaudeCodeSession** queues the request and feeds the prompt to Claude Code SDK
 4. **Claude Code SDK** returns streaming messages:
    - Text content → rendered as markdown in chat
-   - Tool use requests → shown as progress, then confirmed via VS Code's confirmation API
+   - Tool use requests → shown as progress, then confirmed via Pointer's confirmation API
    - Tool results → formatted and displayed in chat
 5. **Result message** signals turn completion, request is resolved
 
@@ -255,7 +255,7 @@ The chat session input controls (permission mode picker, folder picker) are driv
 
 ### Overview
 
-VS Code calls `getChatSessionInputState` to get a `ChatSessionInputState` object whose `.groups` array drives the UI. Rather than computing groups once and returning them, the pipeline keeps `groups` live: shared observables push changes into each state object whenever relevant configuration changes.
+Pointer calls `getChatSessionInputState` to get a `ChatSessionInputState` object whose `.groups` array drives the UI. Rather than computing groups once and returning them, the pipeline keeps `groups` live: shared observables push changes into each state object whenever relevant configuration changes.
 
 ### Key Types
 
@@ -317,7 +317,7 @@ Each pipeline's `store` is disposed via `state.onDidDispose`:
 pipeline.store.add(state.onDidDispose(() => pipeline.store.dispose()));
 ```
 
-When VS Code discards a `ChatSessionInputState`, the `onDidDispose` event fires and deterministically cleans up all autoruns for that state. The `onDidDispose` subscription is itself registered on the pipeline store, so it is cleaned up as part of disposal.
+When Pointer discards a `ChatSessionInputState`, the `onDidDispose` event fires and deterministically cleans up all autoruns for that state. The `onDidDispose` subscription is itself registered on the pipeline store, so it is cleaned up as part of disposal.
 
 ### External Permission Mode Updates
 
@@ -339,14 +339,14 @@ This autorun is registered on `pipeline.store`, so it is disposed along with all
 
 ### Session-Started Signal
 
-The `isSessionStarted` observable controls whether folder items carry `locked: true`. It is set to `true` when `getChatSessionInputState` is called with a `sessionResource` — i.e., whenever VS Code provides a resource for the session. This covers both existing on-disk sessions and sessions that have been started (where a resource has been assigned).
+The `isSessionStarted` observable controls whether folder items carry `locked: true`. It is set to `true` when `getChatSessionInputState` is called with a `sessionResource` — i.e., whenever Pointer provides a resource for the session. This covers both existing on-disk sessions and sessions that have been started (where a resource has been assigned).
 
 For the `previousInputState` path, the lock state is recovered from the items themselves: `_computeSeedValues` checks for `locked: true` on folder items and restores `isSessionStarted` accordingly.
 
 ### Critical Invariant: Subscribe After Both Branches
 
 `_setupInputState` creates `state` and `pipeline` in one of two branches:
-- **`context.previousInputState` path** — VS Code already has a state for this session and is asking for a fresh one; seed from the old groups.
+- **`context.previousInputState` path** — Pointer already has a state for this session and is asking for a fresh one; seed from the old groups.
 - **New-state path** — first call for this session; fetch groups from disk or defaults.
 
 **The external permission mode subscription must run after both branches.** If it only runs in the new-state path, permission mode changes from `EnterPlanMode`/`ExitPlanMode` are silently dropped for every session after the first `getChatSessionInputState` call. Guard against this regression by ensuring the subscription is placed outside the `if/else` block.
@@ -436,7 +436,7 @@ The slash command registry manages custom slash commands available in Claude cha
 **Key Features:**
 - Register handlers using `registerClaudeSlashCommand(handler)`
 - Each handler implements `IClaudeSlashCommandHandler` interface
-- Commands can optionally register with VS Code Command Palette
+- Commands can optionally register with Pointer Command Palette
 - Handlers receive arguments, response stream, and cancellation token
 
 **Handler Interface:**
@@ -444,7 +444,7 @@ The slash command registry manages custom slash commands available in Claude cha
 interface IClaudeSlashCommandHandler {
 	readonly commandName: string;        // Command name (without /)
 	readonly description: string;         // Human-readable description
-	readonly commandId?: string;          // Optional VS Code command ID
+	readonly commandId?: string;          // Optional Pointer command ID
 	handle(args: string, stream: ChatResponseStream | undefined, token: CancellationToken): Promise<ChatResult | void>;
 }
 ```
@@ -489,7 +489,7 @@ Tool permission handlers control what actions Claude can take without user confi
 
 **Auto-approval Rules:**
 - File edits are auto-approved if the file is within the workspace
-- All other tools show a confirmation dialog via VS Code's chat API
+- All other tools show a confirmation dialog via Pointer's chat API
 - User denials send appropriate messages back to Claude
 
 ### MCP Server Registry
@@ -520,7 +520,7 @@ interface IClaudeMcpServerContributor {
 **Index Chain:**
 - `common/mcpServers/index.ts` → Platform-agnostic contributors
 - `node/mcpServers/index.ts` → Node-specific contributors (imports common first)
-- `vscode-node/mcpServers/index.ts` → VS Code-specific contributors (imports node first)
+- `vscode-node/mcpServers/index.ts` → Pointer-specific contributors (imports node first)
 
 **Extending the Registries:**
 
@@ -556,7 +556,7 @@ To add new functionality:
 
 ## Configuration
 
-The integration respects VS Code settings:
+The integration respects Pointer settings:
 - `github.copilot.advanced.claudeCodeDebugEnabled`: Enables debug logging from Claude Code SDK
 
 ## Upgrading Anthropic SDK Packages

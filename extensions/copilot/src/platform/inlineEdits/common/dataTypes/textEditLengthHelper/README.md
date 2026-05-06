@@ -1,1 +1,1 @@
-These sources are copied from the VS Code bracket pair colorization feature.
+These sources are copied from the Pointer bracket pair colorization feature.

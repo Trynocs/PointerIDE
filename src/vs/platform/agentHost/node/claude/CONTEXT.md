@@ -462,7 +462,7 @@ subprocess (Phase 4), multi-tenant token isolation (Phase 4+), proxy
 
 Captured here so they aren't lost. None of these block Phase 2.
 
-- **HTTP proxy support** (`HTTP_PROXY` / `HTTPS_PROXY` env vars, VS Code's
+- **HTTP proxy support** (`HTTP_PROXY` / `HTTPS_PROXY` env vars, Pointer's
   `http.proxy` setting, PAC files, proxy auth). The Phase 2 proxy talks
   to CAPI through `ICopilotApiService`, so any outbound proxying is
   inherited from whatever HTTP client that service uses. If the agent

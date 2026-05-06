@@ -55,7 +55,7 @@ const MAX_BUFFER_SIZE = 1_000;
 const SOFT_BUFFER_CAP = 500;
 
 /**
- * Exports VS Code chat session events to the cloud in real-time.
+ * Exports Pointer chat session events to the cloud in real-time.
  *
  * - Listens to OTel spans, translates to cloud SessionEvent format
  * - Buffers events and flushes in batches every 500ms

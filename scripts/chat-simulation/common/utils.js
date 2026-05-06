@@ -41,7 +41,7 @@ function loadConfig(section) {
 // -- Electron path resolution ------------------------------------------------
 
 /**
- * Derive the VS Code repo root from an Electron executable path.
+ * Derive the Pointer repo root from an Electron executable path.
  * Dev builds live at `<repo>/.build/electron/<app>/`, so we walk up
  * from the path to find the directory containing `.build`.
  * Returns `undefined` if the path doesn't look like a dev build.
@@ -71,7 +71,7 @@ function getElectronPath() {
 }
 
 /**
- * Returns true if the string looks like a VS Code version or commit hash
+ * Returns true if the string looks like a Pointer version or commit hash
  * rather than a file path.
  * @param {string} value
  */
@@ -83,7 +83,7 @@ function isVersionString(value) {
 }
 
 /**
- * Get the built-in extensions directory for a VS Code executable.
+ * Get the built-in extensions directory for a Pointer executable.
  * @param {string} exePath
  * @returns {string | undefined}
  */
@@ -109,7 +109,7 @@ async function resolveBuild(buildArg) {
 		return getElectronPath();
 	}
 	if (isVersionString(buildArg)) {
-		console.log(`[chat-simulation] Downloading VS Code ${buildArg}...`);
+		console.log(`[chat-simulation] Downloading Pointer ${buildArg}...`);
 		const { downloadAndUnzipVSCode, resolveCliArgsFromVSCodeExecutablePath } = require('@vscode/test-electron');
 		const exePath = await downloadAndUnzipVSCode(buildArg);
 		console.log(`[chat-simulation] Downloaded: ${exePath}`);
@@ -153,7 +153,7 @@ async function resolveBuild(buildArg) {
 // -- Storage pre-seeding -----------------------------------------------------
 
 /**
- * Pre-seed the VS Code storage database to prevent the
+ * Pre-seed the Pointer storage database to prevent the
  * BuiltinChatExtensionEnablementMigration from disabling the copilot
  * extension on fresh user data directories.
  *
@@ -175,7 +175,7 @@ function preseedStorage(userDataDir) {
 // -- Launch helpers ----------------------------------------------------------
 
 /**
- * Build the environment variables for launching VS Code with the mock server.
+ * Build the environment variables for launching Pointer with the mock server.
  * @param {{ url: string }} mockServer
  * @param {{ isDevBuild?: boolean }} [opts]
  * @returns {Record<string, string>}
@@ -211,7 +211,7 @@ function buildEnv(mockServer, { isDevBuild = true } = {}) {
 }
 
 /**
- * Build the default VS Code launch args.
+ * Build the default Pointer launch args.
  * @param {string} userDataDir
  * @param {string} extDir
  * @param {string} logsDir
@@ -258,7 +258,7 @@ function buildArgs(userDataDir, extDir, logsDir, { isDevBuild = true, extHostIns
 }
 
 /**
- * Write VS Code settings that point the copilot extension at the mock server.
+ * Write Pointer settings that point the copilot extension at the mock server.
  * @param {string} userDataDir
  * @param {{ url: string }} mockServer
  * @param {Record<string, any>} [overrides]
@@ -317,7 +317,7 @@ function prepareRunDir(runId, mockServer, settingsOverrides) {
 	return { userDataDir, extDir, logsDir };
 }
 
-// -- VS Code launch via CDP --------------------------------------------------
+// -- Pointer launch via CDP --------------------------------------------------
 
 // -- Extension host inspector ------------------------------------------------
 
@@ -444,7 +444,7 @@ function getJson(url) {
 }
 
 /**
- * Wait until VS Code exposes its CDP endpoint.
+ * Wait until Pointer exposes its CDP endpoint.
  * @param {number} port
  * @param {number} timeoutMs
  * @returns {Promise<void>}
@@ -492,10 +492,10 @@ async function findWorkbenchPage(browser, timeoutMs = 60_000) {
 let nextPort = 19222;
 
 /**
- * Launch VS Code via child_process and connect via CDP.
+ * Launch Pointer via child_process and connect via CDP.
  * Works with dev builds, insiders, and stable releases.
  *
- * @param {string} executable - Path to the VS Code executable (Electron binary or CLI)
+ * @param {string} executable - Path to the Pointer executable (Electron binary or CLI)
  * @param {string[]} launchArgs - Arguments to pass to the executable
  * @param {Record<string, string>} env - Environment variables
  * @param {{ verbose?: boolean }} [opts]
@@ -523,7 +523,7 @@ async function launchVSCode(executable, launchArgs, env, opts = {}) {
 	let exitError = /** @type {Error | null} */ (null);
 	child.once('exit', (code, signal) => {
 		if (!exitError) {
-			exitError = new Error(`VS Code exited before CDP connected (code=${code} signal=${signal})`);
+			exitError = new Error(`Pointer exited before CDP connected (code=${code} signal=${signal})`);
 		}
 	});
 

@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-title VSCode Web Serverless
+title Pointer Web Serverless
 
 pushd %~dp0\..
 

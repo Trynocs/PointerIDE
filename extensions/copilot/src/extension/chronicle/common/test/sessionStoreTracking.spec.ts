@@ -104,7 +104,7 @@ describe('extractFilePath', () => {
 });
 
 describe('isGitHubMcpTool', () => {
-	it('matches mcp_github_ prefix (VS Code)', () => {
+	it('matches mcp_github_ prefix (Pointer)', () => {
 		expect(isGitHubMcpTool('mcp_github_issue_write')).toBe(true);
 		expect(isGitHubMcpTool('mcp_github_create_pull_request')).toBe(true);
 		expect(isGitHubMcpTool('mcp_github_search_issues')).toBe(true);

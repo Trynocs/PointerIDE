@@ -64,7 +64,7 @@ interface IPermissionItem {
 	readonly checked: boolean;
 }
 
-// Track whether warnings have been shown this VS Code session
+// Track whether warnings have been shown this Pointer session
 const shownWarnings = new Set<ChatPermissionLevel>();
 
 export class PermissionPicker extends Disposable {

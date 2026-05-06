@@ -620,7 +620,7 @@ class ParticipantDescriptions extends PromptElement<BuiltinParticipantDescriptio
 			})}
 			{this.props.includeDynamicParticipants && <>| github_questions | The user is asking about an issue, pull request, branch, commit hash, diff, discussion, repository, or published release on GitHub.com.  This category does not include performing local Git operations using the CLI. | "What has been changed in the pull request 1361 in browserify/browserify repo?" |<br /></>}
 			{this.props.includeDynamicParticipants && <>| web_questions | The user is asking a question that requires current knowledge from a web search engine. Such questions often reference time periods that exceed your knowledge cutoff. | "What is the latest LTS version of Node.js?" |<br /></>}
-			| unknown | The user's question does not fit exactly one of the categories above, is about a product other than Visual Studio Code or GitHub, or is a general question about code, code errors, or software engineering. | "How do I center a div in CSS?" |<br /></>);
+			| unknown | The user's question does not fit exactly one of the categories above, is about a product other than Pointer or GitHub, or is a general question about code, code errors, or software engineering. | "How do I center a div in CSS?" |<br /></>);
 	}
 }
 
@@ -632,7 +632,7 @@ export class GPT4OIntentDetectionPrompt extends IntentDetectionPrompt {
 		return (<>
 			<HistoryWithInstructions history={history || []} passPriority historyPriority={800}>
 				<InstructionMessage>
-					You are a helpful AI programming assistant to a user who is a software engineer, acting on behalf of the Visual Studio Code editor. Your task is to choose one category from the Markdown table of categories below that matches the user's question. Carefully review the user's question, any previous messages, and any provided context such as code snippets. Respond with just the category name. Your chosen category will help Visual Studio Code provide the user with a higher-quality response, and choosing incorrectly will degrade the user's experience of using Visual Studio Code, so you must choose wisely. If you cannot choose just one category, or if none of the categories seem like they would provide the user with a better result, you must always respond with "unknown".<br />
+					You are a helpful AI programming assistant to a user who is a software engineer, acting on behalf of the Pointer editor. Your task is to choose one category from the Markdown table of categories below that matches the user's question. Carefully review the user's question, any previous messages, and any provided context such as code snippets. Respond with just the category name. Your chosen category will help Pointer provide the user with a higher-quality response, and choosing incorrectly will degrade the user's experience of using Pointer, so you must choose wisely. If you cannot choose just one category, or if none of the categories seem like they would provide the user with a better result, you must always respond with "unknown".<br />
 					<br />
 					| Category name | Category description | Example of matching question |<br />
 					| -- | -- | -- |<br />

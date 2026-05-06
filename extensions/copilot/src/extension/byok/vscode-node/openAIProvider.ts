@@ -37,8 +37,8 @@ export class OAIBYOKLMProvider extends AbstractOpenAICompatibleLMProvider {
 		);
 	}
 
-	protected override getModelsBaseUrl(): string {
-		return 'https://api.openai.com/v1';
+	protected override getModelsBaseUrl(configuration: { baseUrl?: string; url?: string } | undefined): string {
+		return configuration?.baseUrl ?? configuration?.url ?? 'https://api.openai.com/v1';
 	}
 
 	protected override getModelInfo(modelId: string, modelUrl: string): IChatModelInformation {

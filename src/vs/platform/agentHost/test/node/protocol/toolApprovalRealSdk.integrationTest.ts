@@ -699,7 +699,7 @@ function startBackgroundApprovalLoop(c: TestProtocolClient, options: IBackground
 		);
 		const resolvedWorkingDirectoryPath = URI.parse(addedSummary.workingDirectory!).fsPath;
 
-		// Set the active client with tools (matching real VS Code flow where
+		// Set the active client with tools (matching real Pointer flow where
 		// activeClientChanged is dispatched AFTER createSession). When the next
 		// sendMessage detects the tools changed vs the session's creation-time
 		// snapshot, it disposes the SDK session and re-creates it via

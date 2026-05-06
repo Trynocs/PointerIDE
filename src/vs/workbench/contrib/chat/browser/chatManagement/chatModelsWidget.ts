@@ -27,7 +27,7 @@ import { HighlightedLabel } from '../../../../../base/browser/ui/highlightedlabe
 import { SuggestEnabledInput } from '../../../codeEditor/browser/suggestEnabledInput/suggestEnabledInput.js';
 import { Delayer } from '../../../../../base/common/async.js';
 import { settingsTextInputBorder } from '../../../preferences/common/settingsEditorColorRegistry.js';
-import { IChatEntitlementService, ChatEntitlement } from '../../../../services/chat/common/chatEntitlementService.js';
+import { IChatEntitlementService } from '../../../../services/chat/common/chatEntitlementService.js';
 import { DropdownMenuActionViewItem } from '../../../../../base/browser/ui/dropdown/dropdownActionViewItem.js';
 import { IActionViewItemOptions } from '../../../../../base/browser/ui/actionbar/actionViewItems.js';
 import { AnchorAlignment } from '../../../../../base/browser/ui/contextview/contextview.js';
@@ -1391,16 +1391,8 @@ export class ChatModelsWidget extends Disposable {
 	private updateAddModelsButton(): void {
 		const configurableVendors = this.languageModelsService.getVendors().filter(vendor => vendor.managementCommand || vendor.configuration);
 
-		const entitlement = this.chatEntitlementService.entitlement;
-		const isManagedEntitlement = entitlement === ChatEntitlement.Business || entitlement === ChatEntitlement.Enterprise;
-		const supportsAddingModels = this.chatEntitlementService.isInternal
-			|| (isManagedEntitlement && this.chatEntitlementService.clientByokEnabled)
-			|| (entitlement !== ChatEntitlement.Unknown
-				&& entitlement !== ChatEntitlement.Available
-				&& !isManagedEntitlement);
-
-		this.addButton.enabled = supportsAddingModels && configurableVendors.length > 0;
-		this.addButton.setTitle(!supportsAddingModels && isManagedEntitlement ? localize('models.managedByOrganization', "Adding models is managed by your organization") : '');
+		this.addButton.enabled = configurableVendors.length > 0;
+		this.addButton.setTitle('');
 
 		this.dropdownActions = configurableVendors.map(vendor => toAction({
 			id: `enable-${vendor.vendor}`,

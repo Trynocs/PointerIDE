@@ -759,7 +759,7 @@ export class PluginListWidget extends Disposable {
 		this.browseButton.enabled = browseMarketplaceAvailable;
 		this.browseButton.setTitle(browseMarketplaceAvailable
 			? localize('browseMarketplace', "Browse Marketplace")
-			: localize('browseMarketplaceUnsupportedWeb', "Browse Marketplace is not available in VS Code for the Web."));
+			: localize('browseMarketplaceUnsupportedWeb', "Browse Marketplace is not available in Pointer for the Web."));
 
 		this.updateAddButton();
 		this.createPluginButton.enabled = true;

@@ -11,7 +11,7 @@ resources:
       endpoint: Monaco
   pipelines:
     - pipeline: vscode
-      source: '⭐️ VS Code'
+      source: '⭐️ Pointer'
       trigger:
         stages:
           - Release
@@ -105,7 +105,7 @@ extends:
           - template: extensions/copilot/build/steps/test-chat-lib.yml@self
             parameters:
               NPM_REGISTRY: ${{ parameters.NPM_REGISTRY }}
-        # Triggered by ⭐️ VS Code pipeline → always publish to next
+        # Triggered by ⭐️ Pointer pipeline → always publish to next
         publishPackage: true
         publishRequiresApproval: false
         tag: next
