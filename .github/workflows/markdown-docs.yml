@@ -1,0 +1,63 @@
+name: Pointer Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.md'
+      - '.github/workflows/markdown-docs.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.md'
+      - '.github/workflows/markdown-docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    name: Documentation links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate README image references
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const readme = fs.readFileSync('README.md', 'utf8');
+          const imageRefs = [...readme.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]);
+          for (const ref of imageRefs) {
+            if (/^https?:\/\//.test(ref)) {
+              continue;
+            }
+            const decoded = decodeURIComponent(ref);
+            if (!fs.existsSync(decoded)) {
+              throw new Error(`README image reference is missing: ${ref}`);
+            }
+          }
+          console.log(`Validated ${imageRefs.length} README image references.`);
+          NODE
+
+      - name: Validate documentation map
+        run: |
+          for file in \
+            README.md \
+            CONTRIBUTING.md \
+            AGENTS.md \
+            docs/PROJECT_GUIDE.md \
+            docs/TECH_STACK.md \
+            docs/RELEASE.md \
+            .github/copilot-instructions.md \
+            .github/instructions/pointer-project.instructions.md
+          do
+            test -f "$file"
+          done

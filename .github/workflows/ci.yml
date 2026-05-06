@@ -1,0 +1,107 @@
+name: Pointer CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: pointer-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  repo-health:
+    name: Repository health
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate product metadata
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const product = JSON.parse(fs.readFileSync('product.json', 'utf8'));
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const required = {
+            nameShort: 'Pointer',
+            nameLong: 'Pointer',
+            applicationName: 'pointer',
+            dataFolderName: '.pointer',
+            urlProtocol: 'pointer',
+            serverApplicationName: 'pointer-server',
+            tunnelApplicationName: 'pointer-tunnel'
+          };
+          for (const [key, value] of Object.entries(required)) {
+            if (product[key] !== value) {
+              throw new Error(`product.json ${key} must be ${value}, got ${product[key]}`);
+            }
+          }
+          if (pkg.name !== 'pointer-dev') {
+            throw new Error(`package.json name must be pointer-dev, got ${pkg.name}`);
+          }
+          console.log(`Pointer ${pkg.version} metadata looks good.`);
+          NODE
+
+      - name: Validate docs and entrypoints
+        run: |
+          test -f README.md
+          test -f AGENTS.md
+          test -f docs/PROJECT_GUIDE.md
+          test -f docs/TECH_STACK.md
+          test -f docs/RELEASE.md
+          test -f run/start.bat
+          test -f run/start-dev.bat
+          test -f run/dev-stop.bat
+          test -f run/build-pointer.bat
+          test -f scripts/dev-windows.ps1
+          test -f scripts/build-pointer-release.ps1
+
+      - name: Guard against local-only files
+        shell: bash
+        run: |
+          blocked=(
+            ".codex-tools"
+            ".opencode/node_modules"
+            "pntr_b64.txt"
+            "pntr_w_b64.txt"
+            "_validate_json.cjs"
+            "nul"
+          )
+          for path in "${blocked[@]}"; do
+            if git ls-files --error-unmatch "$path" >/dev/null 2>&1; then
+              echo "::error::$path must not be committed"
+              exit 1
+            fi
+          done
+
+  typecheck:
+    name: TypeScript compile check
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Type-check main sources
+        run: npm run compile-check-ts-native
+

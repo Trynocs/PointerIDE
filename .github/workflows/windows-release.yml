@@ -1,0 +1,54 @@
+name: Pointer Windows Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: Windows architecture
+        type: choice
+        default: x64
+        options:
+          - x64
+          - arm64
+      zip:
+        description: Create portable ZIP
+        type: boolean
+        default: true
+      installer:
+        description: Create Inno Setup installer
+        type: boolean
+        default: false
+      fresh:
+        description: Force fresh dependency/native rebuild
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Windows ${{ inputs.arch }}
+    runs-on: windows-2022
+    timeout-minutes: 240
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Pointer
+        shell: pwsh
+        run: |
+          $args = @('-Arch', '${{ inputs.arch }}')
+          if ('${{ inputs.zip }}' -eq 'true') { $args += '-Zip' }
+          if ('${{ inputs.installer }}' -eq 'true') { $args += '-Installer' }
+          if ('${{ inputs.fresh }}' -eq 'true') { $args += '-Fresh' }
+          & .\scripts\build-pointer-release.ps1 @args
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pointer-win32-${{ inputs.arch }}
+          path: .build/artifacts/**
+          if-no-files-found: error
+
