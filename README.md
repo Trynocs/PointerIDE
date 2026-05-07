@@ -26,13 +26,15 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a>
-  ·
+  |
   <a href="#features">Features</a>
-  ·
+  |
   <a href="#tech-stack">Tech Stack</a>
-  ·
+  |
+  <a href="#pointeride-repositories">PointerIDE Repos</a>
+  |
   <a href="#builds">Builds</a>
-  ·
+  |
   <a href="#documentation">Docs</a>
 </p>
 
@@ -107,6 +109,16 @@ Pointer is **not** an official Microsoft product, is **not** Microsoft-signed, a
 | `scripts/` | Lower-level PowerShell, Bat, Node, and shell helpers |
 | `run/` | Human-friendly Windows entrypoints |
 | `docs/` | Pointer project, stack, and release documentation |
+
+## PointerIDE Repositories
+
+| Repository | Description |
+|---|---|
+| [Pointer](https://github.com/PointerIDE/Pointer) | Main IDE |
+| [PointerAssets](https://github.com/PointerIDE/PointerAssets) | Brand and media assets |
+| [PointerDeprecated](https://github.com/PointerIDE/PointerDeprecated) | Legacy desktop app and CLI |
+| [PointerDiscordBot](https://github.com/PointerIDE/PointerDiscordBot) | Discord bots |
+| [PointerWebsite](https://github.com/PointerIDE/PointerWebsite) | Marketing and documentation site |
 
 ## Builds
 
