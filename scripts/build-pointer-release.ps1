@@ -589,6 +589,7 @@ function Install-Dependencies {
 		Write-Host "Skipped, marker exists: $nativeMarker"
 	}
 
+	Install-NpmDirectory -RelativeDirectory 'build'
 	Invoke-Node -Name 'download-electron' -Arguments @('build/lib/electron.ts')
 
 	$dirs = @(
