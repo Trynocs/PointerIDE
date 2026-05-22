@@ -254,6 +254,16 @@ function Invoke-Npm {
 	Invoke-ProcessLogged -Name $Name -FilePath $NpmCmd -Arguments $Arguments -WorkingDirectory $WorkingDirectory
 }
 
+function ConvertTo-CmdArgument {
+	param([Parameter(Mandatory = $true)][string]$Argument)
+
+	if ($Argument -notmatch '[\s"]') {
+		return $Argument
+	}
+
+	return '"' + ($Argument -replace '"', '\"') + '"'
+}
+
 function Start-NpmProcessLogged {
 	param(
 		[Parameter(Mandatory = $true)][string]$Name,
@@ -271,13 +281,16 @@ function Start-NpmProcessLogged {
 
 	Remove-Item -LiteralPath $stdoutPath, $stderrPath, $logPath -Force -ErrorAction SilentlyContinue
 
-	$process = Start-Process -FilePath $NpmCmd `
-		-ArgumentList $Arguments `
-		-WorkingDirectory $WorkingDirectory `
-		-RedirectStandardOutput $stdoutPath `
-		-RedirectStandardError $stderrPath `
-		-PassThru `
-		-NoNewWindow
+	$argumentText = ($Arguments | ForEach-Object { ConvertTo-CmdArgument $_ }) -join ' '
+	$command = "`"$NpmCmd`" $argumentText > `"$stdoutPath`" 2> `"$stderrPath`""
+	$startInfo = New-Object System.Diagnostics.ProcessStartInfo
+	$startInfo.FileName = $env:ComSpec
+	$startInfo.Arguments = "/d /s /c `"$command`""
+	$startInfo.WorkingDirectory = $WorkingDirectory
+	$startInfo.UseShellExecute = $false
+	$startInfo.CreateNoWindow = $true
+
+	$process = [System.Diagnostics.Process]::Start($startInfo)
 
 	return [PSCustomObject]@{
 		Name = $Name
