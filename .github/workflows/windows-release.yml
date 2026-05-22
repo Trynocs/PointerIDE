@@ -47,11 +47,11 @@ jobs:
       - name: Build Pointer
         shell: pwsh
         run: |
-          $args = @('-Arch', '${{ inputs.arch }}')
-          if ('${{ inputs.zip }}' -eq 'true') { $args += '-Zip' }
-          if ('${{ inputs.installer }}' -eq 'true') { $args += '-Installer' }
-          if ('${{ inputs.fresh }}' -eq 'true') { $args += '-Fresh' }
-          & .\scripts\build-pointer-release.ps1 @args
+          $buildArgs = @{ Arch = '${{ inputs.arch }}' }
+          if ('${{ inputs.zip }}' -eq 'true') { $buildArgs['Zip'] = $true }
+          if ('${{ inputs.installer }}' -eq 'true') { $buildArgs['Installer'] = $true }
+          if ('${{ inputs.fresh }}' -eq 'true') { $buildArgs['Fresh'] = $true }
+          & .\scripts\build-pointer-release.ps1 @buildArgs
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
