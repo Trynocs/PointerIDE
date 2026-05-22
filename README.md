@@ -137,6 +137,7 @@ Build logs are stored under `.codex-tools\logs\`. The latest run is referenced b
 - [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) - complete human and coding-AI project guide
 - [docs/TECH_STACK.md](docs/TECH_STACK.md) - short technical stack and ownership map
 - [docs/RELEASE.md](docs/RELEASE.md) - release build, artifacts, logs, and troubleshooting
+- [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md) - public release readiness and smoke-test checklist
 - [AGENTS.md](AGENTS.md) - root instructions for coding agents
 - [.github/copilot-instructions.md](.github/copilot-instructions.md) - Copilot-style coding agent rules
 - [CONTRIBUTING.md](CONTRIBUTING.md) - contribution workflow and review checklist
@@ -160,3 +161,5 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/PROJECT_GUIDE.md](docs/P
 ## License
 
 Pointer retains the original [MIT license](LICENSE.txt) for upstream-derived code and ships as an independently branded product.
+
+Windows release builds are currently unsigned. Verify installers and ZIP archives from the official Pointer GitHub Releases page before installing.

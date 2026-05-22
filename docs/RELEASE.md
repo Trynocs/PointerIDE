@@ -28,6 +28,7 @@ Pointer ist:
 - ein **eigener Rebrand** (Name, Icons, App-IDs)
 - **kein** offizielles Microsoft-Produkt
 - **nicht** Microsoft-signiert
+- aktuell **nicht code-signiert**
 - **nicht** automatisch identisch mit irgendeinem anderen Editor-Download
 - **ohne** Zugang zum offiziellen Microsoft Marketplace (Open VSX wird empfohlen)
 
@@ -75,6 +76,8 @@ run\build-pointer.bat --Installer
 ```bat
 run\build-pointer.bat --Installer --Zip
 ```
+
+Vor einem öffentlichen Release siehe zusätzlich `docs/LAUNCH_CHECKLIST.md`.
 
 ### Alle Flags
 
@@ -303,6 +306,7 @@ run\start-dev.bat
 ## Weiterführende Dokumentation
 
 - `AGENTS.md` - Vollständige Projekt-Dokumentation für Agenten
+- `docs/LAUNCH_CHECKLIST.md` - Release-Checkliste, Smoke-Test und Signatur-Hinweis
 - `build/gulpfile.vscode.ts` - Paketierungs-Task (Quellcode)
 - `build/gulpfile.vscode.win32.ts` - Windows-spezifische Tasks
 - `build/win32/code.iss` - Inno Setup Installer-Skript

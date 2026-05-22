@@ -6,7 +6,7 @@ Group:    Development/Tools
 Vendor:   Pointer Team
 Packager: Pointer Team
 License:  @@LICENSE@@
-URL:      https://github.com/pointer-editor/pointer
+URL:      https://github.com/PointerIDE/Pointer
 Icon:     @@NAME@@.xpm
 Requires: @@DEPENDENCIES@@
 Recommends: @@RECOMMENDS@@

@@ -1,23 +1,26 @@
 ---
-name: Copilot Bug report
-about: Create a report to help us improve Copilot's chat interface in VS Code
+name: AI feature bug report
+about: Report a Pointer AI, chat, or agent workflow issue
 title: ''
-labels: chat-ext-issue
+labels: ai, bug
 assignees: ''
 
 ---
 
-<!-- Please search existing issues to avoid creating duplicates -->
-<!-- Please attach logs to help us diagnose your issue -->
+<!-- Search existing issues first. Do not include API keys, access tokens, prompts containing secrets, or private repository content. -->
 
-- Copilot Chat Extension Version:
-- VS Code Version:
+- Pointer Version:
+- Build type: Installer / ZIP / Dev
 - OS Version:
-- Feature (e.g. agent/edit/ask mode):
-- Selected model (e.g. GPT 4.1, Claude 3.7 Sonnet):
+- Feature: Chat / Agent / Inline completions / Other
+- Provider or extension involved:
 - Logs:
 
 Steps to Reproduce:
 
 1.
 2.
+
+Expected Result:
+
+Actual Result:
