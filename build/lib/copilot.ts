@@ -13,7 +13,31 @@ import * as path from 'path';
 export const copilotPlatforms = [
 	'darwin-arm64', 'darwin-x64',
 	'linux-arm64', 'linux-x64',
+	'linuxmusl-arm64', 'linuxmusl-x64',
 	'win32-arm64', 'win32-x64',
+];
+
+const clipboardNativePlatforms = [
+	'darwin-arm64', 'darwin-x64',
+	'linux-arm64-gnu', 'linux-x64-gnu',
+	'win32-arm64-msvc', 'win32-x64-msvc',
+];
+
+const foundryNativePlatforms = [
+	'darwin-arm64',
+	'linux-x64',
+	'win32-arm64', 'win32-x64',
+];
+
+const pvrecorderNativePlatforms = [
+	'linux/x86_64',
+	'mac/arm64', 'mac/x86_64',
+	'windows/amd64', 'windows/arm64',
+];
+
+const anthropicAudioCapturePlatforms = [
+	'arm64-darwin', 'arm64-linux', 'arm64-win32',
+	'x64-darwin', 'x64-linux', 'x64-win32',
 ];
 
 /**
@@ -41,6 +65,44 @@ function toNodePlatformArch(platform: string, arch: string): { nodePlatform: str
 	return { nodePlatform, nodeArch };
 }
 
+function getClipboardNativePlatform(nodePlatform: string, nodeArch: string): string | undefined {
+	if (nodePlatform === 'win32') {
+		return `win32-${nodeArch}-msvc`;
+	}
+	if (nodePlatform === 'linux') {
+		return `linux-${nodeArch}-gnu`;
+	}
+	if (nodePlatform === 'darwin') {
+		return `darwin-${nodeArch}`;
+	}
+
+	return undefined;
+}
+
+function getFoundryNativePlatform(nodePlatform: string, nodeArch: string): string | undefined {
+	const platformArch = `${nodePlatform}-${nodeArch}`;
+	return foundryNativePlatforms.includes(platformArch) ? platformArch : undefined;
+}
+
+function getPvrecorderNativePlatform(nodePlatform: string, nodeArch: string): string | undefined {
+	if (nodePlatform === 'win32') {
+		return nodeArch === 'arm64' ? 'windows/arm64' : 'windows/amd64';
+	}
+	if (nodePlatform === 'darwin') {
+		return nodeArch === 'arm64' ? 'mac/arm64' : 'mac/x86_64';
+	}
+	if (nodePlatform === 'linux' && nodeArch === 'x64') {
+		return 'linux/x86_64';
+	}
+
+	return undefined;
+}
+
+function getAnthropicAudioCapturePlatform(nodePlatform: string, nodeArch: string): string | undefined {
+	const platformArch = `${nodeArch}-${nodePlatform}`;
+	return anthropicAudioCapturePlatforms.includes(platformArch) ? platformArch : undefined;
+}
+
 /**
  * Returns a glob filter that strips @github/copilot platform packages
  * for architectures other than the build target.
@@ -54,13 +116,64 @@ export function getCopilotExcludeFilter(platform: string, arch: string): string[
 	const { nodePlatform, nodeArch } = toNodePlatformArch(platform, arch);
 	const targetPlatformArch = `${nodePlatform}-${nodeArch}`;
 	const nonTargetPlatforms = copilotPlatforms.filter(p => p !== targetPlatformArch);
+	const targetClipboardPlatform = getClipboardNativePlatform(nodePlatform, nodeArch);
+	const targetFoundryPlatform = getFoundryNativePlatform(nodePlatform, nodeArch);
+	const targetPvrecorderPlatform = getPvrecorderNativePlatform(nodePlatform, nodeArch);
 
 	// Strip wrong-architecture @github/copilot-{platform} packages.
 	// All copilot prebuilds are stripped by .moduleignore; the copilot CLI SDK
 	// resolves `node-pty` from Pointer's own node_modules via `hostRequire`.
 	const excludes = nonTargetPlatforms.map(p => `!**/node_modules/@github/copilot-${p}/**`);
+	excludes.push(...clipboardNativePlatforms
+		.filter(p => p !== targetClipboardPlatform)
+		.flatMap(p => [
+			`!**/node_modules/@github/copilot/clipboard/node_modules/@teddyzhu/clipboard/clipboard.${p}.node`,
+			`!**/node_modules/@github/copilot/clipboard/node_modules/@teddyzhu/clipboard-${p}/**`
+		]));
+	excludes.push(...foundryNativePlatforms
+		.filter(p => p !== targetFoundryPlatform)
+		.map(p => `!**/node_modules/@github/copilot/foundry-local-sdk/node_modules/foundry-local-sdk/prebuilds/${p}/**`));
+	excludes.push(...pvrecorderNativePlatforms
+		.filter(p => p !== targetPvrecorderPlatform)
+		.map(p => `!**/node_modules/@github/copilot/pvrecorder/node_modules/@picovoice/pvrecorder-node/lib/${p}/**`));
 
 	return ['**', ...excludes];
+}
+
+function removeIfExists(base: string, ...segments: string[]): void {
+	fs.rmSync(path.join(base, ...segments), { recursive: true, force: true });
+}
+
+function pruneBuiltInCopilotNativePayloads(platform: string, arch: string, extensionNodeModules: string): void {
+	const { nodePlatform, nodeArch } = toNodePlatformArch(platform, arch);
+	const targetPlatformArch = `${nodePlatform}-${nodeArch}`;
+	const targetClipboardPlatform = getClipboardNativePlatform(nodePlatform, nodeArch);
+	const targetFoundryPlatform = getFoundryNativePlatform(nodePlatform, nodeArch);
+	const targetPvrecorderPlatform = getPvrecorderNativePlatform(nodePlatform, nodeArch);
+	const targetAnthropicAudioCapturePlatform = getAnthropicAudioCapturePlatform(nodePlatform, nodeArch);
+
+	for (const platform of copilotPlatforms.filter(p => p !== targetPlatformArch)) {
+		removeIfExists(extensionNodeModules, '@github', `copilot-${platform}`);
+		removeIfExists(extensionNodeModules, '@github', 'copilot', 'prebuilds', platform);
+		removeIfExists(extensionNodeModules, '@github', 'copilot', 'sdk', 'prebuilds', platform);
+	}
+
+	for (const platform of clipboardNativePlatforms.filter(p => p !== targetClipboardPlatform)) {
+		removeIfExists(extensionNodeModules, '@github', 'copilot', 'clipboard', 'node_modules', '@teddyzhu', 'clipboard', `clipboard.${platform}.node`);
+		removeIfExists(extensionNodeModules, '@github', 'copilot', 'clipboard', 'node_modules', '@teddyzhu', `clipboard-${platform}`);
+	}
+
+	for (const platform of foundryNativePlatforms.filter(p => p !== targetFoundryPlatform)) {
+		removeIfExists(extensionNodeModules, '@github', 'copilot', 'foundry-local-sdk', 'node_modules', 'foundry-local-sdk', 'prebuilds', platform);
+	}
+
+	for (const platform of pvrecorderNativePlatforms.filter(p => p !== targetPvrecorderPlatform)) {
+		removeIfExists(extensionNodeModules, '@github', 'copilot', 'pvrecorder', 'node_modules', '@picovoice', 'pvrecorder-node', 'lib', ...platform.split('/'));
+	}
+
+	for (const platform of anthropicAudioCapturePlatforms.filter(p => p !== targetAnthropicAudioCapturePlatform)) {
+		removeIfExists(extensionNodeModules, '@anthropic-ai', 'claude-agent-sdk', 'vendor', 'audio-capture', platform);
+	}
 }
 
 /**
@@ -84,6 +197,8 @@ export function prepareBuiltInCopilotRipgrepShim(platform: string, arch: string,
 	const platformArch = `${nodePlatform}-${nodeArch}`;
 
 	const extensionNodeModules = path.join(builtInCopilotExtensionDir, 'node_modules');
+	pruneBuiltInCopilotNativePayloads(platform, arch, extensionNodeModules);
+
 	const copilotBase = path.join(extensionNodeModules, '@github', 'copilot');
 	const copilotSdkBase = path.join(copilotBase, 'sdk');
 	if (!fs.existsSync(copilotSdkBase)) {

@@ -1,14 +1,14 @@
-<!-- BEGIN MICROSOFT SECURITY.MD V1.0.0 BLOCK -->
+# Security Policy
 
-## Security
+Pointer takes security reports seriously.
 
-Microsoft takes the security of our software products and services seriously, which
-includes all source code repositories in our GitHub organizations.
+Please do not report suspected vulnerabilities through public GitHub issues. Use
+GitHub's private vulnerability reporting for this repository when it is available,
+or contact a maintainer privately before publishing details.
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+When reporting a vulnerability, include the Pointer version, operating system,
+affected feature, reproduction steps, and any logs or proof-of-concept material
+that can be shared safely.
 
-For security reporting information, locations, contact information, and policies,
-please review the latest guidance for Microsoft repositories at
-[https://aka.ms/SECURITY.md](https://aka.ms/SECURITY.md).
-
-<!-- END MICROSOFT SECURITY.MD BLOCK -->
+Pointer's Windows builds are currently unsigned. Verify release assets from the
+official GitHub Releases page before installing them.

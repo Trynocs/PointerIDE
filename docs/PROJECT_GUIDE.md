@@ -38,6 +38,7 @@ run\start.bat
 | `.github/copilot-instructions.md` | Copilot-style agents | Project-wide coding instructions |
 | `docs/TECH_STACK.md` | Everyone | Short stack and ownership map |
 | `docs/RELEASE.md` | Builders/release | Release build details and troubleshooting |
+| `docs/LAUNCH_CHECKLIST.md` | Maintainers/release | Public release checklist and smoke-test expectations |
 | `CONTRIBUTING.md` | Contributors | Workflow, validation, PR checklist |
 | `src/vs/sessions/README.md` | Sessions contributors | Sessions architecture |
 | `test/README.md` | Test authors | Test infrastructure |

@@ -49,6 +49,12 @@ jobs:
           if (pkg.name !== 'pointer-dev') {
             throw new Error(`package.json name must be pointer-dev, got ${pkg.name}`);
           }
+          const expectedRepo = 'https://github.com/PointerIDE/Pointer';
+          for (const key of ['licenseUrl', 'serverLicenseUrl', 'reportIssueUrl']) {
+            if (!String(product[key] ?? '').startsWith(expectedRepo)) {
+              throw new Error(`product.json ${key} must point at ${expectedRepo}`);
+            }
+          }
           console.log(`Pointer ${pkg.version} metadata looks good.`);
           NODE
 
@@ -83,6 +89,31 @@ jobs:
               exit 1
             fi
           done
+
+      - name: Guard against committed secrets
+        shell: bash
+        run: |
+          if git grep -n -I -E 'BEGIN (RSA|OPENSSH|DSA|EC|PGP) PRIVATE KEY|gh[pousr]_[A-Za-z0-9_]{36,}|github_pat_[A-Za-z0-9_]{22,}_[A-Za-z0-9_]{59,}|sk-(proj-)?[A-Za-z0-9_-]{32,}|xox[baprs]-[A-Za-z0-9-]{20,}' -- . ':!package-lock.json' ':!**/test/**' ':!**/tests/**' ':!**/fixtures/**' ':!**/*.spec.ts'; then
+            echo "::error::Potential committed secret found"
+            exit 1
+          fi
+
+      - name: Validate README image references
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const readme = fs.readFileSync('README.md', 'utf8');
+          const imageRefs = [...readme.matchAll(/<img[^>]+src="([^"]+)"/g)].map(match => match[1]);
+          for (const ref of imageRefs) {
+            if (/^https?:\/\//.test(ref)) {
+              continue;
+            }
+            if (!fs.existsSync(decodeURIComponent(ref))) {
+              throw new Error(`README image reference is missing: ${ref}`);
+            }
+          }
+          console.log(`Validated ${imageRefs.length} README image references.`);
+          NODE
 
   typecheck:
     name: TypeScript compile check

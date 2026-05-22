@@ -4,14 +4,14 @@
 	<metadata_license>@@LICENSE@@</metadata_license>
 	<project_license>@@LICENSE@@</project_license>
 	<name>@@NAME_LONG@@</name>
-	<url type="homepage">https://github.com/pointer-editor/pointer</url>
+	<url type="homepage">https://github.com/PointerIDE/Pointer</url>
 	<summary>Pointer. Code editing, sharpened.</summary>
 	<description>
 		<p>Pointer is a focused code editor for the edit-build-debug cycle, rebranded with the Pointer visual identity.</p>
 	</description>
 	<screenshots>
 		<screenshot type="default">
-			<image>https://github.com/pointer-editor/pointer/raw/main/resources/linux/code.png</image>
+			<image>https://github.com/PointerIDE/Pointer/raw/main/resources/linux/code.png</image>
 			<caption>Editing TypeScript and searching for extensions</caption>
 		</screenshot>
 	</screenshots>

@@ -1,14 +1,22 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest a Pointer improvement
 title: ''
-labels: ''
+labels: feature-request
 assignees: ''
 
 ---
 
-<!-- ⚠️⚠️ Do Not Delete This! feature_request_template ⚠️⚠️ -->
-<!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->
-<!-- Please search existing issues to avoid creating duplicates. -->
+<!-- Search existing issues first so we can keep related feedback together. -->
 
-<!-- Describe the feature you'd like. -->
+## Problem
+
+What workflow or limitation should Pointer improve?
+
+## Proposed Solution
+
+What would you like to happen?
+
+## Alternatives
+
+What have you tried or considered?

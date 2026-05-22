@@ -17,14 +17,22 @@ on:
       installer:
         description: Create Inno Setup installer
         type: boolean
-        default: false
+        default: true
       fresh:
         description: Force fresh dependency/native rebuild
         type: boolean
         default: false
+      tag:
+        description: Release tag
+        type: string
+        default: v1.119.0
+      draft:
+        description: Create the GitHub release as a draft
+        type: boolean
+        default: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -39,11 +47,11 @@ jobs:
       - name: Build Pointer
         shell: pwsh
         run: |
-          $args = @('-Arch', '${{ inputs.arch }}')
-          if ('${{ inputs.zip }}' -eq 'true') { $args += '-Zip' }
-          if ('${{ inputs.installer }}' -eq 'true') { $args += '-Installer' }
-          if ('${{ inputs.fresh }}' -eq 'true') { $args += '-Fresh' }
-          & .\scripts\build-pointer-release.ps1 @args
+          $buildArgs = @{ Arch = '${{ inputs.arch }}' }
+          if ('${{ inputs.zip }}' -eq 'true') { $buildArgs['Zip'] = $true }
+          if ('${{ inputs.installer }}' -eq 'true') { $buildArgs['Installer'] = $true }
+          if ('${{ inputs.fresh }}' -eq 'true') { $buildArgs['Fresh'] = $true }
+          & .\scripts\build-pointer-release.ps1 @buildArgs
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -51,4 +59,45 @@ jobs:
           name: pointer-win32-${{ inputs.arch }}
           path: .build/artifacts/**
           if-no-files-found: error
+
+      - name: Create GitHub draft release
+        if: inputs.zip && inputs.installer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: pwsh
+        run: |
+          $tag = '${{ inputs.tag }}'
+          $arch = '${{ inputs.arch }}'
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $zipPath = ".build/artifacts/Pointer-win32-$arch.zip"
+          $installerPath = ".build/artifacts/PointerSetup-$arch-$version.exe"
+
+          foreach ($asset in @($zipPath, $installerPath)) {
+            if (-not (Test-Path $asset)) {
+              throw "Release asset was not found: $asset"
+            }
+          }
+
+          $notesPath = Join-Path $env:RUNNER_TEMP 'pointer-release-notes.md'
+          @"
+          # Pointer $tag
+
+          First public Pointer Windows x64 release draft.
+
+          Assets:
+          - Pointer-win32-$arch.zip: portable app archive.
+          - PointerSetup-$arch-$version.exe: current-user Windows installer.
+
+          Notes:
+          - Pointer is an independent open-source editor distribution.
+          - This build is not Microsoft-signed.
+          - Windows builds are currently unsigned; verify assets from this GitHub release before installing.
+          "@ | Set-Content -Path $notesPath -Encoding UTF8
+
+          $releaseArgs = @('release', 'create', $tag, $zipPath, $installerPath, '--title', "Pointer $tag", '--notes-file', $notesPath, '--target', $env:GITHUB_SHA)
+          if ('${{ inputs.draft }}' -eq 'true') {
+            $releaseArgs += '--draft'
+          }
+
+          gh @releaseArgs
 

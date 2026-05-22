@@ -111,7 +111,7 @@ export const loopbackTemplate = `
 </head>
 
 <body>
-	<a class="branding" href="https://github.com/pointer-editor/pointer">
+	<a class="branding" href="https://github.com/PointerIDE/Pointer">
 		Pointer
 	</a>
 	<div class="message-container">
